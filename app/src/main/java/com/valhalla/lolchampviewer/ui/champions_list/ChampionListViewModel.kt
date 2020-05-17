@@ -8,8 +8,12 @@ import com.valhalla.lolchampviewer.repository.ChampionsRepository
 import com.valhalla.lolchampviewer.ui.Wizard
 import com.valhalla.lolchampviewer.ui.core.PublishSubject
 import com.valhalla.lolchampviewer.ui.core.publishSubject
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 
 class ChampionListViewModel(
     private val championsRepository: ChampionsRepository,
@@ -30,9 +34,16 @@ class ChampionListViewModel(
     val championListEvents: Flow<ChampionListEvent>
         get() = _championListEvents.asFlow()
 
+    private var job: Job? = null
+
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     fun onStart() {
-        viewModelScope.launch {
+        load()
+    }
+
+    fun load() {
+        job?.cancel()
+        job = viewModelScope.launch {
             _listState.value = ChampionListState.Loading
             try {
                 _list.value = championsRepository.getChampions()

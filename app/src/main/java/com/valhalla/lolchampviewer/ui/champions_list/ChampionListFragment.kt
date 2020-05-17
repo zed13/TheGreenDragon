@@ -8,6 +8,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.valhalla.lolchampviewer.R
 import com.valhalla.lolchampviewer.net.models.ChampionShort
 import com.valhalla.lolchampviewer.ui.champion_details_fragment.ChampionDetailsFragment
@@ -22,6 +23,7 @@ class ChampionListFragment : BaseFragment(R.layout.fragment_champions_list) {
     private val errorView: View? by bindView(R.id.error)
     private val errorLabelView: TextView? by bindView(R.id.error_label)
     private val actionProgress: View? by bindView(R.id.action_progress)
+    private val refresherView: SwipeRefreshLayout? by bindView(R.id.refresher)
 
     private val adapter: ChampionsAdapter = ChampionsAdapter {
         vm.onItemClick(it)
@@ -36,6 +38,11 @@ class ChampionListFragment : BaseFragment(R.layout.fragment_champions_list) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        refresherView?.isEnabled = false
+        refresherView?.setOnRefreshListener {
+            vm.load()
+        }
 
         listView?.apply {
             layoutManager = LinearLayoutManager(view.context)
@@ -64,7 +71,7 @@ class ChampionListFragment : BaseFragment(R.layout.fragment_champions_list) {
             }
             ChampionListState.Loading -> {
                 listView?.isVisible = false
-                progressView?.isVisible = true
+                progressView?.isVisible = true && refresherView?.isEnabled == false
                 errorView?.isVisible = false
             }
             is ChampionListState.Error -> {
@@ -78,6 +85,10 @@ class ChampionListFragment : BaseFragment(R.layout.fragment_champions_list) {
                 progressView?.isVisible = false
                 errorLabelView?.isVisible = false
             }
+        }
+        if (state != ChampionListState.Loading) {
+            refresherView?.isEnabled = true
+            refresherView?.isRefreshing = false
         }
     }
 

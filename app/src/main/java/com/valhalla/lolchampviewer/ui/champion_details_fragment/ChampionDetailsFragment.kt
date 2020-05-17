@@ -10,21 +10,14 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.fragment.app.Fragment
-import androidx.palette.graphics.Palette
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.valhalla.lolchampviewer.R
 import com.valhalla.lolchampviewer.net.models.Champion
 import com.valhalla.lolchampviewer.ui.core.BaseFragment
-import com.valhalla.lolchampviewer.ui.picasso.intoImageView
 import com.valhalla.lolchampviewer.ui.core.bindView
 import com.valhalla.lolchampviewer.ui.core.onClick
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class ChampionDetailsFragment : BaseFragment(R.layout.fragment_champion_details) {
@@ -39,7 +32,6 @@ class ChampionDetailsFragment : BaseFragment(R.layout.fragment_champion_details)
     private val statsContainerView: LinearLayout? by bindView(R.id.stats_container)
     private val skinsCarouselView: RecyclerView? by bindView(R.id.skins_carousel)
 
-    private val mainScope = MainScope()
     private val skinsAdapter = SkinsCarouselAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -108,11 +100,6 @@ class ChampionDetailsFragment : BaseFragment(R.layout.fragment_champion_details)
 
     private fun setSkins(skins: List<String>) {
         skinsAdapter.items = skins
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        mainScope.cancel()
     }
 }
 
