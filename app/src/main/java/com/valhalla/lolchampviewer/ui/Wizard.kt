@@ -28,6 +28,14 @@ class Wizard {
             }
     }
 
+    fun openChampionHistory(champion: Champion) {
+
+    }
+
+    fun openChampionSkills(champion: Champion) {
+
+    }
+
     fun detach() {
         activity = null
     }

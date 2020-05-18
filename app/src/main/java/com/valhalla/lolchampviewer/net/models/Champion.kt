@@ -1,21 +1,22 @@
 package com.valhalla.lolchampviewer.net.models
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class Champion(
-    val id: String,
-    val key: String,
-    val name: String,
-    val title: String,
-    val image: Image,
-    val skins: List<Skin>,
-    val lore: String,
-    val blurb: String,
-    val allytips: List<String>,
-    val enemytips: List<String>,
-    val tags: List<String>,
-    val partype: String,
-    val info: Info,
-    val stats: Stats
+    @SerialName("id") val id: String,
+    @SerialName("key") val key: String,
+    @SerialName("name") val name: String,
+    @SerialName("title") val title: String,
+    @SerialName("image") val image: Image,
+    @SerialName("skins") val skins: List<Skin>,
+    @SerialName("lore") val lore: String,
+    @SerialName("blurb") val blurb: String,
+    @SerialName("allytips") val allTips: List<String>,
+    @SerialName("enemytips") val enemyTips: List<String>,
+    @SerialName("tags") val tags: List<String>,
+    @SerialName("partype") val partype: String,
+    @SerialName("info") val info: Info,
+    @SerialName("stats") val stats: Stats
 ): java.io.Serializable

@@ -1,12 +1,13 @@
 package com.valhalla.lolchampviewer.net.models
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class ChampionsShortData(
-    val type: String,
-    val format: String,
-    val version: String,
-    val data: Map<String, ChampionShort>
+    @SerialName("type") val type: String,
+    @SerialName("format") val format: String,
+    @SerialName("version") val version: String,
+    @SerialName("data") val data: Map<String, ChampionShort>
 ): java.io.Serializable
 

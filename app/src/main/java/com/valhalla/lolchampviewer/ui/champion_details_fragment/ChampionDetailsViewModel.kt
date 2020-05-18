@@ -9,8 +9,9 @@ import com.valhalla.lolchampviewer.net.models.Champion
 import com.valhalla.lolchampviewer.net.models.Stats
 import com.valhalla.lolchampviewer.ui.core.Data
 import com.valhalla.lolchampviewer.ui.core.onlyPresent
-import kotlinx.coroutines.channels.ConflatedBroadcastChannel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class ChampionDetailsViewModel : ViewModel() {
@@ -71,15 +72,15 @@ data class StatViewData(
 )
 
 fun Stats.toList(): List<StatViewData> = listOf(
-    StatViewData("Hit points", hp, hpperlevel),
-    StatViewData("Mana points", mp, mpperlevel),
-    StatViewData("Movement speed", movespeed),
-    StatViewData("Armor", armor, armorperlevel),
-    StatViewData("Spell block", spellblock, spellblockperlevel),
-    StatViewData("Attack range", attackrange),
-    StatViewData("HP regen", hpregen, hpregenperlevel),
-    StatViewData("MP regen", mpregen, mpregenperlevel),
-    StatViewData("Crit", crit, critperlevel),
-    StatViewData("Attack damage", attackdamage, attackdamageperlevel),
-    StatViewData("Attack speed", attackspeed)
+    StatViewData("Hit points", hp, hpPerLevel),
+    StatViewData("Mana points", mp, mpPerLevel),
+    StatViewData("Movement speed", moveSpeed),
+    StatViewData("Armor", armor, armorPerLevel),
+    StatViewData("Spell block", spellBlock, spellBlockPerLevel),
+    StatViewData("Attack range", attackRange),
+    StatViewData("HP regen", hpRegen, hpRegenPerLevel),
+    StatViewData("MP regen", mpRegen, mpRegenPerLevel),
+    StatViewData("Crit", crit, critPerLevel),
+    StatViewData("Attack damage", attackDamage, attackDamagePerLevel),
+    StatViewData("Attack speed", attackSpeed)
 )

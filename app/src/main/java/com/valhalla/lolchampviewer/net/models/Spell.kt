@@ -1,11 +1,12 @@
 package com.valhalla.lolchampviewer.net.models
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class Spell(
-    val id: String,
-    val name: String,
-    val description: String,
-    val tooltip: LevelTip
+    @SerialName("id") val id: String,
+    @SerialName("name") val name: String,
+    @SerialName("description") val description: String,
+    @SerialName("tooltip") val tooltip: LevelTip
 ): java.io.Serializable
