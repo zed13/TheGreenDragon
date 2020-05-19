@@ -1,9 +1,7 @@
 package com.valhalla.lolchampviewer.net
 
-import com.valhalla.lolchampviewer.net.models.Champion
-import com.valhalla.lolchampviewer.net.models.ChampionData
-import com.valhalla.lolchampviewer.net.models.ChampionsShortData
-import com.valhalla.lolchampviewer.net.models.Skin
+import com.valhalla.lolchampviewer.net.models.*
+import kotlinx.serialization.Serializable
 import retrofit2.http.GET
 import retrofit2.http.Path
 
@@ -36,4 +34,11 @@ interface DataDragonApi {
         @Path("locale") locale: String = DEFAULT_LOCALE,
         @Path("championId") championId: String
     ): ChampionData
+
+
+    @GET("test.json")
+    suspend fun getData(): Data
 }
+
+@Serializable
+data class Data(val type: ChampionType)
