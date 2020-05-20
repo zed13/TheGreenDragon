@@ -11,7 +11,7 @@ import retrofit2.Retrofit
 val networkModule = module {
     single<DataDragonApi> {
         Retrofit.Builder()
-            .baseUrl("""http:\\192.168.0.51:8080""")
+            .baseUrl("""http:\\192.168.0.51:8000""")
             .addConverterFactory(
                 Json(JsonConfiguration(ignoreUnknownKeys = true))
                     .asConverterFactory(MediaType.parse("application/json")!!)
