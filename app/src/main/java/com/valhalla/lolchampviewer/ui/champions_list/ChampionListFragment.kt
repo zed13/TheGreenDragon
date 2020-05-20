@@ -62,6 +62,7 @@ class ChampionListFragment : BaseFragment(R.layout.fragment_champions_list) {
     }
 
     private fun setListState(state: ChampionListState) {
+        actionProgress?.isVisible = false
         when (state) {
             ChampionListState.Empty -> {
                 listView?.isVisible = false
@@ -83,7 +84,7 @@ class ChampionListFragment : BaseFragment(R.layout.fragment_champions_list) {
             ChampionListState.Ready -> {
                 listView?.isVisible = true
                 progressView?.isVisible = false
-                errorLabelView?.isVisible = false
+                errorView?.isVisible = false
             }
         }
         if (state != ChampionListState.Loading) {

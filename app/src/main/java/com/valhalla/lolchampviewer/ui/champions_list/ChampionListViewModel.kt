@@ -5,7 +5,7 @@ import androidx.lifecycle.*
 import com.valhalla.lolchampviewer.net.models.Champion
 import com.valhalla.lolchampviewer.net.models.ChampionShort
 import com.valhalla.lolchampviewer.repository.ChampionsRepository
-import com.valhalla.lolchampviewer.ui.Wizard
+import com.valhalla.lolchampviewer.ui.MainWizard
 import com.valhalla.lolchampviewer.ui.core.PublishSubject
 import com.valhalla.lolchampviewer.ui.core.publishSubject
 import kotlinx.coroutines.Job
@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 
 class ChampionListViewModel(
     private val championsRepository: ChampionsRepository,
-    private val wizard: Wizard
+    private val wizard: MainWizard
 ) : ViewModel(), LifecycleObserver {
 
     private val mainScope = MainScope()
@@ -47,7 +47,11 @@ class ChampionListViewModel(
             _listState.value = ChampionListState.Loading
             try {
                 _list.value = championsRepository.getChampions()
-                _listState.value = ChampionListState.Ready
+                if (_list.value.isNotEmpty()) {
+                    _listState.value = ChampionListState.Ready
+                } else {
+                    _listState.value = ChampionListState.Empty
+                }
             } catch (ex: Exception) {
                 Log.i("ChampionsList", "Error is happened when load list", ex)
                 _listState.value = ChampionListState.Error(ex.message ?: "wtf")

@@ -1,79 +1,69 @@
-package com.valhalla.lolchampviewer
+package com.valhalla.lolchampviewer.ui.champions_list
 
 import android.content.res.Resources
-import android.view.View
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.lifecycle.Lifecycle
-import androidx.test.espresso.IdlingRegistry
-import androidx.test.espresso.idling.CountingIdlingResource
+import androidx.test.espresso.ViewAssertion
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.agoda.kakao.screen.Screen.Companion.onScreen
+import com.valhalla.lolchampviewer.R
 import com.valhalla.lolchampviewer.net.models.Champion
 import com.valhalla.lolchampviewer.net.models.ChampionShort
 import com.valhalla.lolchampviewer.repository.ChampionsRepository
 import com.valhalla.lolchampviewer.repository.EmptyChampionsRepository
 import com.valhalla.lolchampviewer.repository.JsonChampionRepository
-import com.valhalla.lolchampviewer.repository.repositoriesModule
-import com.valhalla.lolchampviewer.tools.ViewVisibilityIdleResource
-import com.valhalla.lolchampviewer.ui.champions_list.ChampionListFragment
-import com.valhalla.lolchampviewer.ui.champions_list.ChampionListViewModel
-import com.valhalla.lolchampviewer.ui.champions_list.ListScreen
-import org.junit.After
-import org.junit.Before
+import com.valhalla.lolchampviewer.ui.MainWizard
+import com.valhalla.lolchampviewer.ui.Wizard
+import io.mockk.mockk
+import io.mockk.verify
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.koin.android.viewmodel.dsl.viewModel
-import org.koin.core.context.loadKoinModules
-import org.koin.core.context.unloadKoinModules
 import org.koin.dsl.module
 import org.koin.test.KoinTest
+import org.koin.test.KoinTestRule
+import org.koin.test.mock.declareModule
+
 
 @RunWith(AndroidJUnit4::class)
 class ExampleInstrumentedTest : KoinTest {
 
+    @get:Rule
+    val koinRule = KoinTestRule.create {
+        modules(vmModule, wizardModule)
+    }
 
     val vmModule = module {
         viewModel { ChampionListViewModel(get(), get()) }
     }
 
+    val wizardModule = module {
+        single { MainWizard() }
+    }
+
     val resources: Resources
         get() = InstrumentationRegistry.getInstrumentation().context.resources
 
-    @Before
-    fun setup() {
-        unloadKoinModules(repositoriesModule)
-        loadKoinModules(vmModule)
-    }
-
-    @After
-    fun teardown() {
-        unloadKoinModules(vmModule)
-    }
-
     @Test
     fun test_EmptyList() {
-        val repositoryModule = module {
+        declareModule {
             single<ChampionsRepository> { EmptyChampionsRepository() }
         }
-
-        loadKoinModules(repositoryModule)
 
         val scenario =
             launchFragmentInContainer(themeResId = R.style.AppTheme) { ChampionListFragment() }
 
         scenario.moveToState(Lifecycle.State.RESUMED)
-
-        onScreen<ListScreen> {
+        onScreen<ChampionsListScreen> {
             isErrorShown("The champion list is empty")
         }
-
-        unloadKoinModules(repositoryModule)
     }
 
     @Test
     fun test_ErrorOnLoading() {
-        val repositoryModule = module {
+        declareModule {
             single<ChampionsRepository> {
                 object : ChampionsRepository {
                     override suspend fun getChampions(): List<ChampionShort> {
@@ -84,50 +74,66 @@ class ExampleInstrumentedTest : KoinTest {
                 }
             }
         }
-        loadKoinModules(repositoryModule)
 
         val scenario =
             launchFragmentInContainer(themeResId = R.style.AppTheme) { ChampionListFragment() }
 
         scenario.moveToState(Lifecycle.State.RESUMED)
 
-        onScreen<ListScreen> {
+        onScreen<ChampionsListScreen> {
             isErrorShown("Bad condition happened")
         }
-
-        unloadKoinModules(repositoryModule)
     }
 
     @Test
     fun test_ItemsLoaded() {
-        val repositoryModule = module {
+        declareModule {
             single<ChampionsRepository> {
-                JsonChampionRepository(
-                    resources,
-                    com.valhalla.lolchampviewer.test.R.raw.champion_formatted
-                )
+                JsonChampionRepository(resources)
             }
         }
-        loadKoinModules(repositoryModule)
 
         val scenario =
             launchFragmentInContainer(themeResId = R.style.AppTheme) { ChampionListFragment() }
 
         scenario.moveToState(Lifecycle.State.RESUMED)
 
-        scenario.onFragment {
-            val listView = it.view?.findViewById<View>(R.id.list)!!
-            val idleResource = ViewVisibilityIdleResource(listView)
-            IdlingRegistry.getInstance().register(idleResource)
+        onScreen<ChampionsListScreen> {
+            isListShown()
 
-            onScreen<ListScreen> {
-                isListShown()
+            list.firstChild<ChampionItem> {
+                hasChampionName("Aatrox")
+                hasChampionTitle("the Darkin Blade")
             }
 
-            IdlingRegistry.getInstance().unregister(idleResource)
+            list.lastChild<ChampionItem> {
+                hasChampionName("Zyra")
+                hasChampionTitle("Rise of the Thorns")
+            }
+        }
+    }
+
+//    @Test: todo investigate how to use mockk for tests
+    fun test_OpenItem() {
+        val wizard = mockk<Wizard>(relaxUnitFun = true)
+
+        declareModule {
+            single<ChampionsRepository> {
+                JsonChampionRepository(resources)
+            }
+            single { wizard }
         }
 
-        unloadKoinModules(repositoryModule)
+        val scenario = launchFragmentInContainer(themeResId = R.style.AppTheme)
+        { ChampionListFragment() }
+
+        scenario.moveToState(Lifecycle.State.RESUMED)
+
+        onScreen<ChampionsListScreen> {
+            list.firstChild<ChampionItem> { click() }
+            view.check(ViewAssertion { view, noFoundException ->
+                verify { wizard.openChampionDetails(any()) }
+            })
+        }
     }
 }
-

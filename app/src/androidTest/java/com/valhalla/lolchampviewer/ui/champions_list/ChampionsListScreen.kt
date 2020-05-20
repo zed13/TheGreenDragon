@@ -6,7 +6,7 @@ import com.agoda.kakao.screen.Screen
 import com.agoda.kakao.text.KTextView
 import com.valhalla.lolchampviewer.R
 
-class ListScreen : Screen<ListScreen>() {
+class ChampionsListScreen : Screen<ChampionsListScreen>() {
     val list = KRecyclerView(
         builder = { withId(R.id.list) },
         itemTypeBuilder = { itemType(::ChampionItem) }
@@ -24,9 +24,9 @@ class ListScreen : Screen<ListScreen>() {
     }
 
     fun isErrorShown(text: String) {
+        errorView.isVisible()
         list.isGone()
         progressView.isGone()
-        errorView.isVisible()
         actionProgressView.isGone()
         errorLabelView.hasText(text)
     }
