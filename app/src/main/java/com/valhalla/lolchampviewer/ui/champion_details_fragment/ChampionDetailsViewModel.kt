@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.valhalla.lolchampviewer.net.DataDragonApi
 import com.valhalla.lolchampviewer.net.models.Champion
-import com.valhalla.lolchampviewer.net.models.Stats
+import com.valhalla.lolchampviewer.ui.Wizard
 import com.valhalla.lolchampviewer.ui.core.Data
 import com.valhalla.lolchampviewer.ui.core.onlyPresent
 import kotlinx.coroutines.flow.Flow
@@ -14,7 +14,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-class ChampionDetailsViewModel : ViewModel() {
+class ChampionDetailsViewModel(
+    val wizard: Wizard
+) : ViewModel() {
+
+    private lateinit var champion: Champion
 
     private val _splashImage = MutableStateFlow<Data<String>>(Data.absent())
     private val _iconImage = MutableStateFlow<Data<String>>(Data.absent())
@@ -40,7 +44,7 @@ class ChampionDetailsViewModel : ViewModel() {
         get() = _skins
 
     fun init(arguments: Bundle?) {
-        val champion: Champion = arguments?.getSerializable("champion") as Champion
+        champion = arguments?.getSerializable(Wizard.ARG_CHAMPION) as Champion
 
         viewModelScope.launch {
             _championData.value = Data.of(ChampionViewData(champion))
@@ -51,36 +55,8 @@ class ChampionDetailsViewModel : ViewModel() {
             _skins.value = champion.skins.map { DataDragonApi.getSkinAddress(champion, it) }
         }
     }
+
+    fun openLore() {
+        wizard.openChampionHistory(champion)
+    }
 }
-
-data class ChampionViewData(
-    val name: String,
-    val title: String,
-    val blurb: String
-) {
-    constructor(champion: Champion) : this(
-        name = champion.name,
-        title = champion.title,
-        blurb = champion.blurb
-    )
-}
-
-data class StatViewData(
-    val name: String,
-    val initialValue: Double,
-    val increasePerLevel: Double? = null
-)
-
-fun Stats.toList(): List<StatViewData> = listOf(
-    StatViewData("Hit points", hp, hpPerLevel),
-    StatViewData("Mana points", mp, mpPerLevel),
-    StatViewData("Movement speed", moveSpeed),
-    StatViewData("Armor", armor, armorPerLevel),
-    StatViewData("Spell block", spellBlock, spellBlockPerLevel),
-    StatViewData("Attack range", attackRange),
-    StatViewData("HP regen", hpRegen, hpRegenPerLevel),
-    StatViewData("MP regen", mpRegen, mpRegenPerLevel),
-    StatViewData("Crit", crit, critPerLevel),
-    StatViewData("Attack damage", attackDamage, attackDamagePerLevel),
-    StatViewData("Attack speed", attackSpeed)
-)

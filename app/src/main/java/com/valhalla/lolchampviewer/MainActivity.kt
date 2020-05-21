@@ -2,8 +2,9 @@ package com.valhalla.lolchampviewer
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.valhalla.lolchampviewer.ui.MainWizard
+import com.valhalla.lolchampviewer.ui.Wizard
 import com.valhalla.lolchampviewer.ui.champion_details_fragment.ChampionDetailsViewModel
+import com.valhalla.lolchampviewer.ui.champion_history.ChampionHistoryViewModel
 import com.valhalla.lolchampviewer.ui.champions_list.ChampionListFragment
 import com.valhalla.lolchampviewer.ui.champions_list.ChampionListViewModel
 import org.koin.android.ext.android.getKoin
@@ -17,12 +18,13 @@ class MainActivity : AppCompatActivity() {
         getKoin().loadModules(listOf(
             module {
                 viewModel { ChampionListViewModel(get(), get()) }
-                viewModel { ChampionDetailsViewModel() }
+                viewModel { ChampionDetailsViewModel(get()) }
+                viewModel { ChampionHistoryViewModel() }
             }
         ))
     }
 
-    private val wizard: MainWizard by inject()
+    private val wizard: Wizard by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

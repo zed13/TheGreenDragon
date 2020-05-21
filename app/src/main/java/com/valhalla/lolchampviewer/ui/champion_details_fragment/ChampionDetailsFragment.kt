@@ -55,6 +55,10 @@ class ChampionDetailsFragment : BaseFragment(R.layout.fragment_champion_details)
             Toast.makeText(view.context, "Skills button is clicked", Toast.LENGTH_SHORT).show()
         }
 
+        onClick(R.id.read_lore) {
+            vm.openLore()
+        }
+
         vm.splashImage bindTo ::setSplash
         vm.iconImage bindTo ::setIcon
         vm.championData bindTo ::setChampionData
