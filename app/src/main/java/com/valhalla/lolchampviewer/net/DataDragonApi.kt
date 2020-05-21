@@ -11,7 +11,7 @@ interface DataDragonApi {
         const val DEFAULT_VERSION = "10.9.1"
         const val DEFAULT_LOCALE = "en_US"
 
-        const val API_ADDRESS = "http://192.168.0.51:8080"
+        const val API_ADDRESS = "http://192.168.0.51:8000"
 
         fun getIconAddress(iconId: String): String {
             return "$API_ADDRESS/$DEFAULT_VERSION/img/champion/${iconId}"
