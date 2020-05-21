@@ -5,7 +5,7 @@ import androidx.lifecycle.*
 import com.valhalla.lolchampviewer.net.models.Champion
 import com.valhalla.lolchampviewer.net.models.ChampionShort
 import com.valhalla.lolchampviewer.repository.ChampionsRepository
-import com.valhalla.lolchampviewer.ui.MainWizard
+import com.valhalla.lolchampviewer.ui.Wizard
 import com.valhalla.lolchampviewer.ui.core.PublishSubject
 import com.valhalla.lolchampviewer.ui.core.publishSubject
 import kotlinx.coroutines.Job
@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 
 class ChampionListViewModel(
     private val championsRepository: ChampionsRepository,
-    private val wizard: MainWizard
+    private val wizard: Wizard
 ) : ViewModel(), LifecycleObserver {
 
     private val mainScope = MainScope()

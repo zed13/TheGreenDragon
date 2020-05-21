@@ -1,4 +1,4 @@
-package com.valhalla.lolchampviewer.ui.champions_list
+package com.valhalla.lolchampviewer.ui.champions_list.pos
 
 import com.agoda.kakao.common.views.KView
 import com.agoda.kakao.recycler.KRecyclerView

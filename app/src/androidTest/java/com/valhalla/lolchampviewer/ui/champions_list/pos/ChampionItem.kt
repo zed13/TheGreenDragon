@@ -1,4 +1,4 @@
-package com.valhalla.lolchampviewer.ui.champions_list
+package com.valhalla.lolchampviewer.ui.champions_list.pos
 
 import android.view.View
 import android.widget.TextView

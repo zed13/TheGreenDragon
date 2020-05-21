@@ -1,15 +1,9 @@
 package com.valhalla.lolchampviewer
 
-import com.valhalla.lolchampviewer.net.CommonEnumSerializer
 import com.valhalla.lolchampviewer.net.DataDragonApi
-import com.valhalla.lolchampviewer.net.models.ChampionType
-import com.valhalla.lolchampviewer.net.models.ChampionTypeSerializer
 import com.valhalla.lolchampviewer.net.networkModule
 import kotlinx.coroutines.runBlocking
-import kotlinx.serialization.json.Json
 import org.junit.Test
-
-import org.junit.Assert.*
 import org.koin.core.context.startKoin
 import org.koin.java.KoinJavaComponent
 
