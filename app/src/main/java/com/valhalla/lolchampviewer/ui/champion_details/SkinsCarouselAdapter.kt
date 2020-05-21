@@ -1,4 +1,4 @@
-package com.valhalla.lolchampviewer.ui.champion_details_fragment
+package com.valhalla.lolchampviewer.ui.champion_details
 
 import android.view.ViewGroup
 import android.widget.ImageView

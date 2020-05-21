@@ -1,4 +1,4 @@
-package com.valhalla.lolchampviewer.ui.champion_details_fragment
+package com.valhalla.lolchampviewer.ui.champion_details
 
 import android.os.Bundle
 import android.util.Log
@@ -58,5 +58,9 @@ class ChampionDetailsViewModel(
 
     fun openLore() {
         wizard.openChampionHistory(champion)
+    }
+
+    fun onSkillsClick() {
+        wizard.openChampionSkills(champion)
     }
 }

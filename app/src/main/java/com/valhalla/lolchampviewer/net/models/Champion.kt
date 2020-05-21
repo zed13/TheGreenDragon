@@ -18,5 +18,7 @@ data class Champion(
     @SerialName("tags") val tags: List<String>,
     @SerialName("partype") val partype: String,
     @SerialName("info") val info: Info,
-    @SerialName("stats") val stats: Stats
-): java.io.Serializable
+    @SerialName("stats") val stats: Stats,
+    @SerialName("spells") val spells: List<Spell>,
+    @SerialName("passive") val passive: Passive
+) : java.io.Serializable

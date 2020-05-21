@@ -6,8 +6,9 @@ import androidx.fragment.app.commit
 import com.valhalla.lolchampviewer.R
 import com.valhalla.lolchampviewer.net.models.Champion
 import com.valhalla.lolchampviewer.ui.Wizard.Companion.ARG_CHAMPION
-import com.valhalla.lolchampviewer.ui.champion_details_fragment.ChampionDetailsFragment
+import com.valhalla.lolchampviewer.ui.champion_details.ChampionDetailsFragment
 import com.valhalla.lolchampviewer.ui.champion_history.ChampionHistoryFragment
+import com.valhalla.lolchampviewer.ui.champion_skills.ChampionSkillsFragment
 
 class MainWizard : Wizard {
 
@@ -44,7 +45,16 @@ class MainWizard : Wizard {
     }
 
     override fun openChampionSkills(champion: Champion) {
-
+        activity?.supportFragmentManager
+            ?.commit {
+                add(
+                    R.id.container,
+                    ChampionSkillsFragment::class.java,
+                    bundleOf(ARG_CHAMPION to champion),
+                    "champion_skills"
+                )
+                addToBackStack(null)
+            }
     }
 
     override fun detach() {

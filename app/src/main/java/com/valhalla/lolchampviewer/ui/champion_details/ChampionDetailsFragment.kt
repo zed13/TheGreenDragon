@@ -1,4 +1,4 @@
-package com.valhalla.lolchampviewer.ui.champion_details_fragment
+package com.valhalla.lolchampviewer.ui.champion_details
 
 import android.graphics.Color
 import android.os.Bundle
@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
@@ -51,9 +50,7 @@ class ChampionDetailsFragment : BaseFragment(R.layout.fragment_champion_details)
             LinearLayoutManager(view.context, LinearLayoutManager.HORIZONTAL, false)
         skinsCarouselView?.adapter = skinsAdapter
 
-        onClick(R.id.skills_button) {
-            Toast.makeText(view.context, "Skills button is clicked", Toast.LENGTH_SHORT).show()
-        }
+        onClick(R.id.skills_button) { vm.onSkillsClick() }
 
         onClick(R.id.read_lore) {
             vm.openLore()

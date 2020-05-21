@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.valhalla.lolchampviewer.R
 import com.valhalla.lolchampviewer.net.models.ChampionShort
-import com.valhalla.lolchampviewer.ui.champion_details_fragment.ChampionDetailsFragment
+import com.valhalla.lolchampviewer.ui.champion_details.ChampionDetailsFragment
 import com.valhalla.lolchampviewer.ui.core.BaseFragment
 import com.valhalla.lolchampviewer.ui.core.bindView
 import org.koin.android.viewmodel.ext.android.viewModel

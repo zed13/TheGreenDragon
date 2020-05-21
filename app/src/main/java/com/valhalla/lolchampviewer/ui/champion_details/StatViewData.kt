@@ -1,4 +1,4 @@
-package com.valhalla.lolchampviewer.ui.champion_details_fragment
+package com.valhalla.lolchampviewer.ui.champion_details
 
 import com.valhalla.lolchampviewer.net.models.Stats
 

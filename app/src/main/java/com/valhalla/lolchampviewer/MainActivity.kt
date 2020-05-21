@@ -3,8 +3,9 @@ package com.valhalla.lolchampviewer
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.valhalla.lolchampviewer.ui.Wizard
-import com.valhalla.lolchampviewer.ui.champion_details_fragment.ChampionDetailsViewModel
+import com.valhalla.lolchampviewer.ui.champion_details.ChampionDetailsViewModel
 import com.valhalla.lolchampviewer.ui.champion_history.ChampionHistoryViewModel
+import com.valhalla.lolchampviewer.ui.champion_skills.ChampionSkillsViewModel
 import com.valhalla.lolchampviewer.ui.champions_list.ChampionListFragment
 import com.valhalla.lolchampviewer.ui.champions_list.ChampionListViewModel
 import org.koin.android.ext.android.getKoin
@@ -20,6 +21,7 @@ class MainActivity : AppCompatActivity() {
                 viewModel { ChampionListViewModel(get(), get()) }
                 viewModel { ChampionDetailsViewModel(get()) }
                 viewModel { ChampionHistoryViewModel() }
+                viewModel { ChampionSkillsViewModel() }
             }
         ))
     }

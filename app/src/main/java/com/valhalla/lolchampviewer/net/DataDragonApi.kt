@@ -1,9 +1,6 @@
 package com.valhalla.lolchampviewer.net
 
-import com.valhalla.lolchampviewer.net.models.Champion
-import com.valhalla.lolchampviewer.net.models.ChampionData
-import com.valhalla.lolchampviewer.net.models.ChampionsShortData
-import com.valhalla.lolchampviewer.net.models.Skin
+import com.valhalla.lolchampviewer.net.models.*
 import retrofit2.http.GET
 import retrofit2.http.Path
 
@@ -15,12 +12,22 @@ interface DataDragonApi {
 
         const val API_ADDRESS = "http://192.168.0.51:8000"
 
+        private val spellMapping = arrayOf("Q", "W", "E", "R")
+
         fun getIconAddress(iconId: String): String {
             return "$API_ADDRESS/$DEFAULT_VERSION/img/champion/${iconId}"
         }
 
         fun getSkinAddress(champion: Champion, skin: Skin): String {
             return "$API_ADDRESS/img/champion/splash/${champion.id}_${skin.num}.jpg"
+        }
+
+        fun getPassiveIcon(passive: Passive): String {
+            return "$API_ADDRESS/$DEFAULT_VERSION/img/passive/${passive.image.full}"
+        }
+
+        fun getSpellIcon(spell: Spell): String {
+            return "$API_ADDRESS/$DEFAULT_VERSION/img/spell/${spell.image.full}"
         }
     }
 
