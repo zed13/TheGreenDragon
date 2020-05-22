@@ -2,6 +2,7 @@ package com.valhalla.lolchampviewer
 
 import android.app.Application
 import com.squareup.picasso.Picasso
+import com.valhalla.lolchampviewer.net.DataDragonApi
 import com.valhalla.lolchampviewer.net.networkModule
 import com.valhalla.lolchampviewer.repository.repositoriesModule
 import com.valhalla.lolchampviewer.ui.MainWizard
@@ -22,6 +23,7 @@ class App : Application() {
                 networkModule,
                 repositoriesModule,
                 module {
+                    single(Qualifiers.serverAddress) { DataDragonApi.API_ADDRESS }
                     single<Wizard> { MainWizard() }
                 }
             )

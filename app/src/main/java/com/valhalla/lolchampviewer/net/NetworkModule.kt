@@ -4,6 +4,7 @@ import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterF
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.squareup.picasso.OkHttp3Downloader
 import com.squareup.picasso.Picasso
+import com.valhalla.lolchampviewer.Qualifiers
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonConfiguration
 import okhttp3.MediaType.Companion.toMediaType
@@ -30,7 +31,7 @@ val networkModule = module {
 
     single<DataDragonApi> {
         Retrofit.Builder()
-            .baseUrl(DataDragonApi.API_ADDRESS)
+            .baseUrl(get<String>(Qualifiers.serverAddress))
             .client(get())
             .addConverterFactory(
                 Json(JsonConfiguration(ignoreUnknownKeys = true))
