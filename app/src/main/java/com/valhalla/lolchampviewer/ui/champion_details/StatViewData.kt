@@ -8,6 +8,19 @@ data class StatViewData(
     val increasePerLevel: Double? = null
 )
 
+fun StatViewData.format(): String {
+    return if (increasePerLevel != null) {
+        String.format(
+            "%s: %.1f (+ %.1f per level)",
+            name,
+            initialValue,
+            increasePerLevel
+        )
+    } else {
+        String.format("%s: %.1f", name, initialValue)
+    }
+}
+
 fun Stats.toList(): List<StatViewData> = listOf(
     StatViewData(
         "Hit points",

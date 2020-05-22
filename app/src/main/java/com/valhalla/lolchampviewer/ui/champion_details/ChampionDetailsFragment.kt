@@ -90,7 +90,7 @@ class ChampionDetailsFragment : BaseFragment(R.layout.fragment_champion_details)
             val textView = TextView(view.context)
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
             textView.setTextColor(Color.BLACK)
-            textView.setStatViewData(stat)
+            textView.text = stat.format()
             statsContainerView?.addView(
                 textView,
                 ViewGroup.LayoutParams.MATCH_PARENT,
@@ -101,18 +101,5 @@ class ChampionDetailsFragment : BaseFragment(R.layout.fragment_champion_details)
 
     private fun setSkins(skins: List<String>) {
         skinsAdapter.items = skins
-    }
-}
-
-internal fun TextView.setStatViewData(data: StatViewData) {
-    if (data.increasePerLevel != null) {
-        text = String.format(
-            "%s: %.1f (+ %.1f per level)",
-            data.name,
-            data.initialValue,
-            data.increasePerLevel
-        )
-    } else {
-        text = String.format("%s: %.1f", data.name, data.initialValue)
     }
 }
