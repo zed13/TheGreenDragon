@@ -1,20 +1,21 @@
 package com.valhalla.lolchampviewer.ui.champion_details
 
-import android.content.res.Resources
 import androidx.core.os.bundleOf
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.lifecycle.Lifecycle
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
 import com.agoda.kakao.screen.Screen.Companion.onScreen
+import com.valhalla.lolchampviewer.Qualifiers
 import com.valhalla.lolchampviewer.R
-import com.valhalla.lolchampviewer.net.models.Champion
-import com.valhalla.lolchampviewer.repository.ChampionsRepository
-import com.valhalla.lolchampviewer.repository.JsonChampionRepository
+import com.valhalla.lolchampviewer.mainModule
+import com.valhalla.lolchampviewer.net.models.ChampionData
+import com.valhalla.lolchampviewer.net.networkModule
+import com.valhalla.lolchampviewer.repository.repositoriesModule
+import com.valhalla.lolchampviewer.tools.TestResourcesPlugin
 import com.valhalla.lolchampviewer.ui.Wizard
 import com.valhalla.lolchampviewer.ui.champion_details.pos.ChampionDetailsScreen
-import io.mockk.mockk
-import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.serializer
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -22,26 +23,35 @@ import org.koin.test.KoinTest
 import org.koin.test.KoinTestRule
 import org.koin.test.get
 import org.koin.test.mock.declareModule
+import kotlin.reflect.KClass
 
 @RunWith(AndroidJUnit4::class)
-class ChampionDetailsTest : KoinTest {
+class ChampionDetailsTest : KoinTest, TestResourcesPlugin {
 
     @get:Rule
     val koinTestRule = KoinTestRule.create {
+        modules(
+            mainModule,
+            networkModule,
+            repositoriesModule,
+            championDetailsModule
+        )
+
         declareModule {
-            single<Resources> { InstrumentationRegistry.getInstrumentation().context.resources }
-            single<Wizard> { mockk() }
-            single { ChampionDetailsViewModel(get()) }
-            single<ChampionsRepository> { JsonChampionRepository(get()) }
+            single<String>(Qualifiers.serverAddress) { "http://localhost" }
         }
     }
 
+    val json: Json
+        get() = get()
+
+    @kotlinx.serialization.ImplicitReflectionSerializer
     @Test
     fun testDataAreSet() {
-        val champ: Champion = runBlocking {
-            JsonChampionRepository(get()).getChampion("")
-                ?: error("champion should be stubbed here")
-        }
+        val textData = readTextAsset("champion.json")
+        val klass: KClass<ChampionData> = ChampionData::class
+        val champ = json.parse(klass.serializer(), textData).data.values.first()
+
 
         launchFragmentInContainer(
             themeResId = R.style.AppTheme,

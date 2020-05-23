@@ -22,6 +22,7 @@ class App : Application() {
             modules(
                 networkModule,
                 repositoriesModule,
+                mainModule,
                 module {
                     single(Qualifiers.serverAddress) { DataDragonApi.API_ADDRESS }
                     single<Wizard> { MainWizard() }

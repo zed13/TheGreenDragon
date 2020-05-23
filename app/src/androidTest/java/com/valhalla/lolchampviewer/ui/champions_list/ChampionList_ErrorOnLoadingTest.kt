@@ -6,6 +6,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.agoda.kakao.screen.Screen.Companion.onScreen
 import com.valhalla.lolchampviewer.Qualifiers
 import com.valhalla.lolchampviewer.R
+import com.valhalla.lolchampviewer.mainModule
 import com.valhalla.lolchampviewer.net.networkModule
 import com.valhalla.lolchampviewer.repository.repositoriesModule
 import com.valhalla.lolchampviewer.tools.MockWebServerRule
@@ -27,6 +28,7 @@ class ChampionList_ErrorOnLoadingTest : KoinTest {
 
     val koinRule = KoinTestRule.create {
         modules(
+            mainModule,
             networkModule,
             repositoriesModule,
             championListModule
