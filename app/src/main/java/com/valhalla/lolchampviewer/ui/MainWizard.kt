@@ -28,7 +28,7 @@ class MainWizard : Wizard {
                     "champion_details"
                 )
                 addToBackStack(null)
-            }
+            } ?: error("Activity not attached to wizard")
     }
 
     override fun openChampionHistory(champion: Champion) {
@@ -41,7 +41,7 @@ class MainWizard : Wizard {
                     "champion_history"
                 )
                 addToBackStack(null)
-            }
+            } ?: error("Activity not attached to wizard")
     }
 
     override fun openChampionSkills(champion: Champion) {
@@ -54,7 +54,7 @@ class MainWizard : Wizard {
                     "champion_skills"
                 )
                 addToBackStack(null)
-            }
+            } ?: error("Activity not attached to wizard")
     }
 
     override fun detach() {
