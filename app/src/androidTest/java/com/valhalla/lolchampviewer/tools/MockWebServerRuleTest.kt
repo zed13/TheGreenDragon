@@ -19,7 +19,7 @@ import retrofit2.http.GET
 class MockWebServerRuleTest {
 
     @get:Rule
-    val mockServerRule = MockWebserviceRule()
+    val mockServerRule = MockWebServerRule()
 
     @Test
     fun testNormalFlow() {

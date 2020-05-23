@@ -1,15 +1,19 @@
 package com.valhalla.lolchampviewer.tools
 
-import android.content.Context
+import okhttp3.mockwebserver.MockResponse
 
-interface TestResources {
+interface TestResourcesPlugin : InstrumentationTestPlugin {
 
-    fun readTextAsset(androidContext: Context, name: String): String {
+    fun readTextAsset(name: String): String {
         val contextClass = this::class.java
         val basePackage = contextClass.getPackage()?.name
         val packagePath = basePackage?.replace(".", "/")
             ?: error("Provided class '$contextClass' should be in package")
         return String(androidContext.assets.open("$packagePath/$name").readBytes())
+    }
+
+    fun MockResponse.setAssetBody(name: String): MockResponse {
+        return setBody(readTextAsset(name))
     }
 }
 
