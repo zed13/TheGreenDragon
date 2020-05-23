@@ -9,4 +9,7 @@ data class ChampionData(
     @SerialName("format") val format: String,
     @SerialName("version") val version: String,
     @SerialName("data") val data: Map<String, Champion>
-): java.io.Serializable
+) : java.io.Serializable
+
+val ChampionData.champion: Champion
+    get() = data.values.first()
