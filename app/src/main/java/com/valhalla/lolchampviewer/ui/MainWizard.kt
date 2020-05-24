@@ -8,6 +8,7 @@ import com.valhalla.lolchampviewer.net.models.Champion
 import com.valhalla.lolchampviewer.ui.Wizard.Companion.ARG_CHAMPION
 import com.valhalla.lolchampviewer.ui.champion_details.ChampionDetailsFragment
 import com.valhalla.lolchampviewer.ui.champion_history.ChampionHistoryFragment
+import com.valhalla.lolchampviewer.ui.champion_search.ChampionSearchFragment
 import com.valhalla.lolchampviewer.ui.champion_skills.ChampionSkillsFragment
 
 class MainWizard : Wizard {
@@ -28,7 +29,7 @@ class MainWizard : Wizard {
                     "champion_details"
                 )
                 addToBackStack(null)
-            } ?: error("Activity not attached to wizard")
+            } ?: error("Wizard are not attached to activity")
     }
 
     override fun openChampionHistory(champion: Champion) {
@@ -41,7 +42,7 @@ class MainWizard : Wizard {
                     "champion_history"
                 )
                 addToBackStack(null)
-            } ?: error("Activity not attached to wizard")
+            } ?: error("Wizard are not attached to activity")
     }
 
     override fun openChampionSkills(champion: Champion) {
@@ -54,7 +55,19 @@ class MainWizard : Wizard {
                     "champion_skills"
                 )
                 addToBackStack(null)
-            } ?: error("Activity not attached to wizard")
+            } ?: error("Wizard are not attached to activity")
+    }
+
+    override fun openSearch() {
+        activity?.supportFragmentManager
+            ?.commit {
+                add(
+                    R.id.container,
+                    ChampionSearchFragment(),
+                    "champion_search"
+                )
+                addToBackStack(null)
+            } ?: error("Wizard are not attached to activity")
     }
 
     override fun detach() {

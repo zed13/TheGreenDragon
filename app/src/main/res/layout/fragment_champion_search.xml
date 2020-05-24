@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="16dp">
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="16dp"
+            app:srcCompat="@drawable/ic_24_search" />
+
+        <EditText
+            android:id="@+id/query_field"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@null"
+            android:hint="Enter the champion name or title">
+
+            <requestFocus />
+        </EditText>
+
+        <ImageView
+            android:id="@+id/clear_button"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="?selectableItemBackgroundBorderless"
+            app:srcCompat="@drawable/ic_24_close" />
+    </LinearLayout>
+
+    <View style="@style/Markup.Divider" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/item_champion_list" />
+
+        <FrameLayout
+            android:id="@+id/message_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#fff">
+
+            <TextView
+                android:id="@+id/message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Nothing found"
+                android:textAppearance="?textAppearanceHeadline6"
+                android:textColor="#aaa" />
+        </FrameLayout>
+    </FrameLayout>
+
+</LinearLayout>

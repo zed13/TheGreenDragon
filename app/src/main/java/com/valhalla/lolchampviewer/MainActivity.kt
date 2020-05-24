@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.valhalla.lolchampviewer.ui.Wizard
 import com.valhalla.lolchampviewer.ui.champion_details.ChampionDetailsViewModel
 import com.valhalla.lolchampviewer.ui.champion_history.ChampionHistoryViewModel
+import com.valhalla.lolchampviewer.ui.champion_search.ChampionSearchViewModel
 import com.valhalla.lolchampviewer.ui.champion_skills.ChampionSkillsViewModel
 import com.valhalla.lolchampviewer.ui.champions_list.ChampionListFragment
 import com.valhalla.lolchampviewer.ui.champions_list.ChampionListViewModel
@@ -18,10 +19,11 @@ class MainActivity : AppCompatActivity() {
     init {
         getKoin().loadModules(listOf(
             module {
-                viewModel { ChampionListViewModel(get(), get()) }
-                viewModel { ChampionDetailsViewModel(get()) }
-                viewModel { ChampionHistoryViewModel() }
-                viewModel { ChampionSkillsViewModel() }
+                viewModel<ChampionListViewModel> { ChampionListViewModel(get(), get()) }
+                viewModel<ChampionDetailsViewModel> { ChampionDetailsViewModel(get()) }
+                viewModel<ChampionHistoryViewModel> { ChampionHistoryViewModel() }
+                viewModel<ChampionSkillsViewModel> { ChampionSkillsViewModel() }
+                viewModel<ChampionSearchViewModel> { ChampionSearchViewModel(get(), get()) }
             }
         ))
     }

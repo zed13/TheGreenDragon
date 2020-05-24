@@ -13,5 +13,6 @@ interface Wizard {
     fun openChampionDetails(champion: Champion)
     fun openChampionHistory(champion: Champion)
     fun openChampionSkills(champion: Champion)
+    fun openSearch()
     fun detach()
 }

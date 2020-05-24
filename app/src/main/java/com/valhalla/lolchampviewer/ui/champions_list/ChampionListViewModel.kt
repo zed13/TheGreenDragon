@@ -86,6 +86,12 @@ class ChampionListViewModel(
         super.onCleared()
         mainScope.cancel()
     }
+
+    fun onSearchClick() {
+        mainScope.launch {
+            wizard.openSearch()
+        }
+    }
 }
 
 sealed class ChampionListState {

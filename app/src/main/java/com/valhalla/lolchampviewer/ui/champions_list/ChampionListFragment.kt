@@ -14,10 +14,12 @@ import com.valhalla.lolchampviewer.net.models.ChampionShort
 import com.valhalla.lolchampviewer.ui.champion_details.ChampionDetailsFragment
 import com.valhalla.lolchampviewer.ui.core.BaseFragment
 import com.valhalla.lolchampviewer.ui.core.bindView
+import com.valhalla.lolchampviewer.ui.core.onClick
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class ChampionListFragment : BaseFragment(R.layout.fragment_champions_list) {
 
+    private val searchBarView: View? by bindView(R.id.search_bar)
     private val listView: RecyclerView? by bindView(R.id.list)
     private val progressView: View? by bindView(R.id.progress)
     private val errorView: View? by bindView(R.id.error)
@@ -53,6 +55,13 @@ class ChampionListFragment : BaseFragment(R.layout.fragment_champions_list) {
                     DividerItemDecoration.VERTICAL
                 )
             )
+        }
+
+        onClick(R.id.search_bar) {
+            vm.onSearchClick()
+        }
+        onClick(R.id.filter_button) {
+            Toast.makeText(view.context, "Filter button clicked", Toast.LENGTH_SHORT).show()
         }
 
         vm.listState bindTo ::setListState

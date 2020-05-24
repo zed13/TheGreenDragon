@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/refresher"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -9,10 +11,67 @@
         android:layout_height="match_parent"
         android:background="#fff">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/list"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/search_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                app:cardElevation="2dp"
+                app:shapeAppearance="@style/ShapeAppearance.MaterialComponents.MediumComponent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginStart="16dp"
+                        app:srcCompat="@drawable/ic_24_search" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:background="@android:color/transparent"
+                        android:paddingStart="16dp"
+                        android:paddingTop="12dp"
+                        android:paddingBottom="12dp"
+                        android:text="Enter the champion name"
+                        android:textAppearance="?textAppearanceBody1" />
+
+                    <ImageView
+                        android:id="@+id/filter_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="?selectableItemBackgroundBorderless"
+                        android:paddingStart="16dp"
+                        android:paddingTop="12dp"
+                        android:paddingEnd="16dp"
+                        android:paddingBottom="12dp"
+                        app:srcCompat="@drawable/ic_24_tune" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:listitem="@layout/item_champion_list" />
+        </LinearLayout>
 
         <FrameLayout
             android:id="@+id/progress"
@@ -31,7 +90,8 @@
             android:id="@+id/error"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="visible">
+            android:visibility="visible"
+            tools:visibility="gone">
 
             <TextView
                 android:id="@+id/error_label"
@@ -47,7 +107,8 @@
             android:id="@+id/action_progress"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#a0af">
+            android:background="#a0af"
+            tools:visibility="gone">
 
             <ProgressBar
                 android:layout_width="match_parent"

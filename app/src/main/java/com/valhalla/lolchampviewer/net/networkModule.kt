@@ -14,7 +14,7 @@ import retrofit2.Retrofit
 import java.util.concurrent.TimeUnit
 
 val networkModule = module {
-    single {
+    single<OkHttpClient> {
         OkHttpClient.Builder()
             .addInterceptor(
                 HttpLoggingInterceptor().apply {

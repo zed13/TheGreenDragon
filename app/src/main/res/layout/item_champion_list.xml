@@ -16,7 +16,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@color/colorPrimaryDark" />
+        tools:srcCompat="@sample/champion_tile" />
 
     <TextView
         android:id="@+id/champ_name"
@@ -29,7 +29,7 @@
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toEndOf="@+id/champ_icon"
         app:layout_constraintTop_toTopOf="@+id/champ_icon"
-        tools:text="Aatrox" />
+        tools:text="@sample/champion.json/data/name" />
 
     <TextView
         android:id="@+id/champ_title"
@@ -39,6 +39,6 @@
         android:textAppearance="?textAppearanceCaption"
         app:layout_constraintStart_toStartOf="@+id/champ_name"
         app:layout_constraintTop_toBottomOf="@+id/champ_name"
-        tools:text="the Darkin Blade" />
+        tools:text="@sample/champion.json/data/title" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
