@@ -7,6 +7,7 @@ import android.text.style.ForegroundColorSpan
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.valhalla.lolchampviewer.R
@@ -21,6 +22,18 @@ class ChampionSearchAdapter(
     init {
         setHasStableIds(true)
     }
+
+    override var items: List<ChampionSearchViewData> = emptyList()
+        set(value) {
+            val result = DiffUtil.calculateDiff(
+                SearchDataDiffCallback(
+                    field,
+                    value
+                )
+            )
+            field = value
+            result.dispatchUpdatesTo(this)
+        }
 
     private val textColorSpan = ForegroundColorSpan(Color.GREEN)
 
