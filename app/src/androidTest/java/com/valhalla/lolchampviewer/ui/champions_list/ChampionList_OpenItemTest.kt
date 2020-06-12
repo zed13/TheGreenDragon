@@ -72,6 +72,7 @@ class ChampionList_OpenItemTest : KoinTest, TestResourcesPlugin {
 
         val wizard = mockk<Wizard>(relaxUnitFun = true)
 
+
         declareModule {
             single { wizard }
         }
@@ -83,7 +84,7 @@ class ChampionList_OpenItemTest : KoinTest, TestResourcesPlugin {
         scenario.moveToState(Lifecycle.State.RESUMED)
 
         onScreen<ChampionsListScreen> {
-            list.firstChild<ChampionItem> { click() }
+            list.lastChild<ChampionItem> { click() }
         }
 
         verify { wizard.openChampionDetails(any()) }

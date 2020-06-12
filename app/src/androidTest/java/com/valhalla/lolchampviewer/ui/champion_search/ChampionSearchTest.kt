@@ -5,6 +5,7 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.valhalla.lolchampviewer.Qualifiers
@@ -12,14 +13,12 @@ import com.valhalla.lolchampviewer.R
 import com.valhalla.lolchampviewer.mainModule
 import com.valhalla.lolchampviewer.net.networkModule
 import com.valhalla.lolchampviewer.repository.repositoriesModule
-import com.valhalla.lolchampviewer.tools.MockWebServerRule
-import com.valhalla.lolchampviewer.tools.OkHttp3IdlingResource
-import com.valhalla.lolchampviewer.tools.TestResourcesPlugin
+import com.valhalla.lolchampviewer.tools.*
 import com.valhalla.lolchampviewer.ui.Wizard
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import okhttp3.mockwebserver.MockResponse
-import org.junit.Ignore
+import org.hamcrest.CoreMatchers.allOf
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
@@ -32,6 +31,8 @@ import org.koin.test.mock.declareModule
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
 class ChampionSearchTest : KoinTest, TestResourcesPlugin {
+
+    val repeatRule = RepeatRule()
 
     val serverRule = MockWebServerRule()
 
@@ -50,10 +51,11 @@ class ChampionSearchTest : KoinTest, TestResourcesPlugin {
     }
 
     @get:Rule
-    val ruleChain = RuleChain.outerRule(serverRule)
+    val ruleChain = RuleChain.outerRule(repeatRule)
+        .around(serverRule)
         .around(koinRule)
 
-    @Ignore("Need to figure out how to make it works properly with lists")
+    @Repeat(1)
     @Test
     fun test() {
         val idlingResource = OkHttp3IdlingResource.create("network-idler", get())
@@ -70,8 +72,49 @@ class ChampionSearchTest : KoinTest, TestResourcesPlugin {
 
         onView(withId(R.id.query_field)).perform(typeText("nin"))
 
-        onView(withId(R.id.list)).check(matches(hasChildCount(2)))
-        onView(withText("Ahri")).check(matches(isDisplayed()))
-        onView(withText("Brand")).check(matches(isDisplayed()))
+        repeatUntilDone {
+            onView(withId(R.id.list)).check(matches(hasChildCount(2)))
+
+            onView(withId(R.id.list)).perform(
+                RecyclerViewActions.scrollToPosition<ChampionViewHolder>(0)
+            )
+
+            onView(
+                allOf(
+                    isDescendantOfA(withParent(withId(R.id.list))),
+                    withId(R.id.champ_name),
+                    withText("Ahri")
+                )
+            ).check(matches(isDisplayed()))
+
+            onView(
+                allOf(
+                    isDescendantOfA(withParent(withId(R.id.list))),
+                    withId(R.id.champ_title),
+                    withText("the Nine-Tailed Fox")
+                )
+            ).check(matches(isDisplayed()))
+
+
+            onView(withId(R.id.list)).perform(
+                RecyclerViewActions.scrollToPosition<ChampionViewHolder>(1)
+            )
+
+            onView(
+                allOf(
+                    isDescendantOfA(withParent(withId(R.id.list))),
+                    withId(R.id.champ_name),
+                    withText("Brand")
+                )
+            ).check(matches(isDisplayed()))
+
+            onView(
+                allOf(
+                    isDescendantOfA(withParent(withId(R.id.list))),
+                    withId(R.id.champ_title),
+                    withText("the Burning Vengeance")
+                )
+            ).check(matches(isDisplayed()))
+        }
     }
 }

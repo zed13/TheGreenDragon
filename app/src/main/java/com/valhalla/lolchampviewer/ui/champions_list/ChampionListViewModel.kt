@@ -92,6 +92,11 @@ class ChampionListViewModel(
             wizard.openSearch()
         }
     }
+
+    fun getSmth(): Int {
+        return 10
+    }
+
 }
 
 sealed class ChampionListState {
