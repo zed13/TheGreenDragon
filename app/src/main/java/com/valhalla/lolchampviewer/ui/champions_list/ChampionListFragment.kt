@@ -37,7 +37,7 @@ class ChampionListFragment : BaseFragment(R.layout.fragment_champions_list) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (savedInstanceState == null) {
-            lifecycle.addObserver(vm)
+            vm.registerOn(lifecycle)
         }
     }
 

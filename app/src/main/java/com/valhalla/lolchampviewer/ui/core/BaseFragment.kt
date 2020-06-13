@@ -45,6 +45,10 @@ open class BaseFragment(@LayoutRes contentLayoutId: Int) : Fragment(contentLayou
     }
 
     open fun onBack() {
-        findNavController().popBackStack()
+        if (!findNavController().popBackStack()) {
+            requireActivity().finish()
+        }
     }
+
+
 }

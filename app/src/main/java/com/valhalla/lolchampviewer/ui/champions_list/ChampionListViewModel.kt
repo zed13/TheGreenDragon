@@ -2,40 +2,47 @@ package com.valhalla.lolchampviewer.ui.champions_list
 
 import android.util.Log
 import androidx.lifecycle.*
+import com.valhalla.lolchampviewer.core.Publisher
 import com.valhalla.lolchampviewer.net.models.Champion
 import com.valhalla.lolchampviewer.net.models.ChampionShort
 import com.valhalla.lolchampviewer.repository.ChampionsRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 class ChampionListViewModel(
     private val championsRepository: ChampionsRepository
-) : ViewModel(), LifecycleObserver {
+) : ViewModel(), DefaultLifecycleObserver {
 
     private val mainScope = MainScope()
 
     private val _list = MutableStateFlow<List<ChampionShort>>(emptyList())
     private val _isItemLoading = MutableStateFlow(false)
-    private val _championListEvents: BroadcastChannel<ChampionListEvent> =
-        BroadcastChannel(1)
     private val _listState = MutableStateFlow<ChampionListState>(ChampionListState.Loading)
 
     val list: Flow<List<ChampionShort>> = _list
     val isItemLoading: Flow<Boolean> = _isItemLoading
     val listState: Flow<ChampionListState> = _listState
     val championListEvents: Flow<ChampionListEvent>
-        get() = _championListEvents.openSubscription().receiveAsFlow()
+        get() = _championListEvents.events
+
+    private val _championListEvents: Publisher<ChampionListEvent> = Publisher()
 
     private var job: Job? = null
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_START)
-    fun onStart() {
+    fun registerOn(lifecycle: Lifecycle) {
+        lifecycle.addObserver(this)
+        _championListEvents.registerOn(lifecycle)
+    }
+
+    override fun onDestroy(owner: LifecycleOwner) {
+        owner.lifecycle.removeObserver(this)
+    }
+
+    override fun onStart(owner: LifecycleOwner) {
         load()
     }
 
@@ -72,9 +79,9 @@ class ChampionListViewModel(
                 null
             }
             if (championFull != null) {
-                _championListEvents.send(ChampionListEvent.OpenChampion(championFull))
+                _championListEvents.publish(ChampionListEvent.OpenChampion(championFull))
             } else {
-                _championListEvents.send(ChampionListEvent.ChampionLoadingFailed(champion))
+                _championListEvents.publish(ChampionListEvent.ChampionLoadingFailed(champion))
             }
             _isItemLoading.value = false
         }
@@ -87,10 +94,9 @@ class ChampionListViewModel(
 
     fun onSearchClick() {
         viewModelScope.launch {
-            _championListEvents.send(ChampionListEvent.OpenSearch)
+            _championListEvents.publish(ChampionListEvent.OpenSearch)
         }
     }
-
 }
 
 sealed class ChampionListState {

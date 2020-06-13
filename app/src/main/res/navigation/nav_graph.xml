@@ -37,7 +37,7 @@
         android:id="@+id/championSearchFragment"
         android:name="com.valhalla.lolchampviewer.ui.champion_search.ChampionSearchFragment"
         android:label="Champion Search Fragment"
-        tools:layout="@layout/fragment_champion_search" >
+        tools:layout="@layout/fragment_champion_search">
         <action
             android:id="@+id/action_championSearch_to_championDetails"
             app:destination="@id/championDetailsFragment" />
