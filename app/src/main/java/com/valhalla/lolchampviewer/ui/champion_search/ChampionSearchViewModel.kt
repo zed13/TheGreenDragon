@@ -3,12 +3,13 @@ package com.valhalla.lolchampviewer.ui.champion_search
 import android.util.Log
 import androidx.lifecycle.*
 import androidx.test.espresso.idling.CountingIdlingResource
+import com.valhalla.lolchampviewer.core.SingleLiveEvent
+import com.valhalla.lolchampviewer.core.combineLatest
+import com.valhalla.lolchampviewer.core.perform
 import com.valhalla.lolchampviewer.net.models.Champion
 import com.valhalla.lolchampviewer.net.models.ChampionShort
 import com.valhalla.lolchampviewer.repository.ChampionsRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.channels.BroadcastChannel
-import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
@@ -16,23 +17,16 @@ class ChampionSearchViewModel(
     private val championsRepository: ChampionsRepository
 ) : ViewModel(), LifecycleObserver {
 
-    private val _list: MutableStateFlow<List<ChampionShort>> =
-        MutableStateFlow(emptyList())
+    private val _list: MutableLiveData<List<ChampionShort>> = MutableLiveData()
 
-    private val _query: MutableStateFlow<String> = MutableStateFlow("")
-
-    private val _events: BroadcastChannel<ChampionSearchEvent> = BroadcastChannel(1)
-
-    val events: Flow<ChampionSearchEvent>
-        get() = _events.openSubscription().receiveAsFlow()
+    val championSearchEvents: SingleLiveEvent<ChampionSearchEvent> = SingleLiveEvent()
 
     internal val searchResource: CountingIdlingResource =
         CountingIdlingResource("champion-search", true)
 
-    val list: Flow<ChampionSearchResult>
-        get() = _list.combine(_query) { l, q -> l to q }
-            .onEach { searchResource.increment() }
-            .map { (list, query) ->
+    val list: LiveData<ChampionSearchResult>
+        get() = _list.combineLatest(queryText) { list, query ->
+            searchResource.perform {
                 if (query.isBlank()) {
                     ChampionSearchResult.NoQuery
                 } else {
@@ -50,10 +44,10 @@ class ChampionSearchViewModel(
                             }
                         }
                 }
-            }.onEach { searchResource.decrement() }
+            }
+        }
 
-    val query: Flow<String>
-        get() = _query
+    val queryText: MutableLiveData<String> = MutableLiveData()
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun onCreate() {
@@ -63,7 +57,7 @@ class ChampionSearchViewModel(
     }
 
     fun onQueryChanged(query: String) {
-        _query.value = query
+        this.queryText.value = query
     }
 
     fun onChampionClicked(data: ChampionSearchViewData) {
@@ -75,12 +69,12 @@ class ChampionSearchViewModel(
                 null
             } ?: return@launch
 
-            _events.send(ChampionSearchEvent.OpenChampion(champion))
+            championSearchEvents.value = ChampionSearchEvent.OpenChampion(champion)
         }
     }
 
     fun onClearQueryClick() {
-        _query.value = ""
+        this.queryText.value = ""
     }
 }
 

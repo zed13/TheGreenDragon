@@ -77,10 +77,6 @@ class ChampionListFragment : BaseFragment(R.layout.fragment_champions_list) {
         vm.championListEvents bindTo ::handleEvent
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-    }
-
     private fun setListState(state: ChampionListState) {
         actionProgress?.isVisible = false
         when (state) {

@@ -57,7 +57,7 @@ class ChampionDetailsFragment : BaseFragment(R.layout.fragment_champion_details)
         vm.championData bindTo ::setChampionData
         vm.statsData bindTo ::setStats
         vm.skins bindTo ::setSkins
-        vm.events bindTo ::handleEvent
+        vm.championDetailsEvents bindTo ::handleEvent
     }
 
     private fun setSplash(splashUrl: String) {

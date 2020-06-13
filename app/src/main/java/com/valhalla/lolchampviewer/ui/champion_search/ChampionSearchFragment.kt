@@ -15,7 +15,6 @@ import com.valhalla.lolchampviewer.ui.core.BaseFragment
 import com.valhalla.lolchampviewer.ui.core.bindView
 import com.valhalla.lolchampviewer.ui.core.onClick
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.filter
 import org.koin.android.viewmodel.ext.android.viewModel
 
 @ExperimentalCoroutinesApi
@@ -54,8 +53,8 @@ class ChampionSearchFragment : BaseFragment(R.layout.fragment_champion_search) {
         }
 
         vm.list bindTo ::setList
-        vm.events bindTo ::handleEvent
-        vm.query.filter { it != queryFieldView?.text?.toString() } bindTo ::setQuery
+        vm.championSearchEvents bindTo ::handleEvent
+        vm.queryText bindTo ::setQuery
     }
 
     private fun setList(result: ChampionSearchResult) {
@@ -79,7 +78,9 @@ class ChampionSearchFragment : BaseFragment(R.layout.fragment_champion_search) {
     }
 
     private fun setQuery(query: String) {
-        queryFieldView?.setText(query)
+        if (query != queryFieldView?.text?.toString()) {
+            queryFieldView?.setText(query)
+        }
     }
 
     private fun handleEvent(event: ChampionSearchEvent) {
