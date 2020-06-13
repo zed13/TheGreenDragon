@@ -13,7 +13,7 @@
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@tools:sample/avatars" />
+        tools:src="@sample/spell_image" />
 
     <TextView
         android:id="@+id/spell_name"
@@ -23,7 +23,7 @@
         android:textAppearance="?textAppearanceBody2"
         app:layout_constraintStart_toEndOf="@+id/spell_icon"
         app:layout_constraintTop_toTopOf="@+id/spell_icon"
-        tools:text="Orb of Deception" />
+        tools:text="@sample/spell.json/data/name" />
 
     <TextView
         android:id="@+id/spell_description"
@@ -36,6 +36,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/spell_name"
         app:layout_constraintTop_toBottomOf="@+id/spell_name"
-        tools:text="Ahri sends out and pulls back her orb, dealing magic damage on the way out and true damage on the way back. After earning several spell hits, Ahri's next orb hits will restore her health." />
+        tools:text="@sample/spell.json/data/description" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

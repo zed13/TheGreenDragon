@@ -13,7 +13,6 @@ import com.valhalla.lolchampviewer.net.networkModule
 import com.valhalla.lolchampviewer.repository.repositoriesModule
 import com.valhalla.lolchampviewer.tools.JsonTestPlugin
 import com.valhalla.lolchampviewer.tools.TestResourcesPlugin
-import com.valhalla.lolchampviewer.ui.Wizard
 import com.valhalla.lolchampviewer.ui.champion_history.pos.ChampionHistoryScreen
 import kotlinx.serialization.json.Json
 import org.junit.Rule
@@ -48,7 +47,7 @@ class ChampionHistoryTest : KoinTest, TestResourcesPlugin, JsonTestPlugin {
 
         launchFragmentInContainer(
             themeResId = R.style.AppTheme,
-            fragmentArgs = bundleOf(Wizard.ARG_CHAMPION to champ)
+            fragmentArgs = bundleOf("champion" to champ)
         ) {
             ChampionHistoryFragment()
         }.moveToState(Lifecycle.State.RESUMED)

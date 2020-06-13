@@ -5,8 +5,6 @@ import com.squareup.picasso.Picasso
 import com.valhalla.lolchampviewer.net.DataDragonApi
 import com.valhalla.lolchampviewer.net.networkModule
 import com.valhalla.lolchampviewer.repository.repositoriesModule
-import com.valhalla.lolchampviewer.ui.MainWizard
-import com.valhalla.lolchampviewer.ui.Wizard
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -25,7 +23,6 @@ class App : Application() {
                 mainModule,
                 module {
                     single(Qualifiers.serverAddress) { DataDragonApi.API_ADDRESS }
-                    single<Wizard> { MainWizard() }
                 }
             )
         }

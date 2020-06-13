@@ -2,18 +2,18 @@ package com.valhalla.lolchampviewer.ui.champion_details
 
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.os.bundleOf
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.valhalla.lolchampviewer.R
-import com.valhalla.lolchampviewer.net.models.Champion
 import com.valhalla.lolchampviewer.ui.core.BaseFragment
 import com.valhalla.lolchampviewer.ui.core.bindView
 import com.valhalla.lolchampviewer.ui.core.onClick
@@ -35,8 +35,6 @@ class ChampionDetailsFragment : BaseFragment(R.layout.fragment_champion_details)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val champion: Champion = arguments?.getSerializable("champion") as Champion
-        Log.i("ChampionDetails", "champion received name=${champion.name}")
         if (savedInstanceState == null) {
             vm.init(arguments)
         }
@@ -52,15 +50,14 @@ class ChampionDetailsFragment : BaseFragment(R.layout.fragment_champion_details)
 
         onClick(R.id.skills_button) { vm.onSkillsClick() }
 
-        onClick(R.id.read_lore) {
-            vm.openLore()
-        }
+        onClick(R.id.read_lore) { vm.openLore() }
 
         vm.splashImage bindTo ::setSplash
         vm.iconImage bindTo ::setIcon
         vm.championData bindTo ::setChampionData
         vm.statsData bindTo ::setStats
         vm.skins bindTo ::setSkins
+        vm.events bindTo ::handleEvent
     }
 
     private fun setSplash(splashUrl: String) {
@@ -101,5 +98,22 @@ class ChampionDetailsFragment : BaseFragment(R.layout.fragment_champion_details)
 
     private fun setSkins(skins: List<String>) {
         skinsAdapter.items = skins
+    }
+
+    private fun handleEvent(event: ChampionDetailsEvent) {
+        when (event) {
+            is ChampionDetailsEvent.OpenHistory -> {
+                findNavController().navigate(
+                    R.id.action_championDetails_to_championHistory,
+                    bundleOf("champion" to event.champion)
+                )
+            }
+            is ChampionDetailsEvent.OpenSkills -> {
+                findNavController().navigate(
+                    R.id.action_championDetails_to_championSkills,
+                    bundleOf("champion" to event.champion)
+                )
+            }
+        }
     }
 }

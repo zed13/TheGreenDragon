@@ -14,8 +14,6 @@ import com.valhalla.lolchampviewer.mainModule
 import com.valhalla.lolchampviewer.net.networkModule
 import com.valhalla.lolchampviewer.repository.repositoriesModule
 import com.valhalla.lolchampviewer.tools.*
-import com.valhalla.lolchampviewer.ui.Wizard
-import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import okhttp3.mockwebserver.MockResponse
 import org.hamcrest.CoreMatchers.allOf
@@ -45,7 +43,6 @@ class ChampionSearchTest : KoinTest, TestResourcesPlugin {
         )
 
         declareModule {
-            single<Wizard> { mockk() }
             single<String>(Qualifiers.serverAddress) { serverRule.url("/") }
         }
     }

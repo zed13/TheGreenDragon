@@ -6,5 +6,5 @@ import org.koin.dsl.module
 
 @ExperimentalCoroutinesApi
 val championSearchModule = module {
-    viewModel<ChampionSearchViewModel> { ChampionSearchViewModel(get(), get()) }
+    viewModel<ChampionSearchViewModel> { ChampionSearchViewModel(get()) }
 }

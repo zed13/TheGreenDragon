@@ -15,8 +15,6 @@ import com.valhalla.lolchampviewer.net.networkModule
 import com.valhalla.lolchampviewer.repository.repositoriesModule
 import com.valhalla.lolchampviewer.tools.MockWebServerRule
 import com.valhalla.lolchampviewer.tools.TestResourcesPlugin
-import com.valhalla.lolchampviewer.ui.MainWizard
-import com.valhalla.lolchampviewer.ui.Wizard
 import okhttp3.mockwebserver.MockResponse
 import org.junit.Rule
 import org.junit.Test
@@ -38,7 +36,6 @@ class WatchLoreFlowTest : KoinTest, TestResourcesPlugin {
 
         declareModule {
             single<String>(Qualifiers.serverAddress) { serverRule.url("/") }
-            single<Wizard> { MainWizard() }
         }
     }
 

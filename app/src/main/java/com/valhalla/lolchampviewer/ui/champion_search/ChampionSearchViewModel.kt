@@ -6,17 +6,14 @@ import androidx.test.espresso.idling.CountingIdlingResource
 import com.valhalla.lolchampviewer.net.models.Champion
 import com.valhalla.lolchampviewer.net.models.ChampionShort
 import com.valhalla.lolchampviewer.repository.ChampionsRepository
-import com.valhalla.lolchampviewer.ui.Wizard
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
 class ChampionSearchViewModel(
-    private val championsRepository: ChampionsRepository,
-    private val wizard: Wizard
+    private val championsRepository: ChampionsRepository
 ) : ViewModel(), LifecycleObserver {
 
     private val _list: MutableStateFlow<List<ChampionShort>> =
@@ -24,7 +21,10 @@ class ChampionSearchViewModel(
 
     private val _query: MutableStateFlow<String> = MutableStateFlow("")
 
-    private val mainScope: CoroutineScope = MainScope()
+    private val _events: BroadcastChannel<ChampionSearchEvent> = BroadcastChannel(1)
+
+    val events: Flow<ChampionSearchEvent>
+        get() = _events.openSubscription().receiveAsFlow()
 
     internal val searchResource: CountingIdlingResource =
         CountingIdlingResource("champion-search", true)
@@ -75,11 +75,15 @@ class ChampionSearchViewModel(
                 null
             } ?: return@launch
 
-            mainScope.launch { wizard.openChampionDetails(champion) }
+            _events.send(ChampionSearchEvent.OpenChampion(champion))
         }
     }
 
     fun onClearQueryClick() {
         _query.value = ""
     }
+}
+
+sealed class ChampionSearchEvent {
+    data class OpenChampion(val champion: Champion) : ChampionSearchEvent()
 }

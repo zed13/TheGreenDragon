@@ -2,9 +2,13 @@ package com.valhalla.lolchampviewer.ui.champions_list
 
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.lifecycle.Lifecycle
+import androidx.navigation.Navigation
+import androidx.navigation.testing.TestNavHostController
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.agoda.kakao.screen.Screen.Companion.onScreen
+import com.google.common.truth.Truth.assertThat
 import com.valhalla.lolchampviewer.Qualifiers
 import com.valhalla.lolchampviewer.R
 import com.valhalla.lolchampviewer.mainModule
@@ -13,11 +17,8 @@ import com.valhalla.lolchampviewer.repository.repositoriesModule
 import com.valhalla.lolchampviewer.tools.MockWebServerRule
 import com.valhalla.lolchampviewer.tools.OkHttp3IdlingResource
 import com.valhalla.lolchampviewer.tools.TestResourcesPlugin
-import com.valhalla.lolchampviewer.ui.Wizard
 import com.valhalla.lolchampviewer.ui.champions_list.pos.ChampionItem
 import com.valhalla.lolchampviewer.ui.champions_list.pos.ChampionsListScreen
-import io.mockk.mockk
-import io.mockk.verify
 import okhttp3.mockwebserver.MockResponse
 import org.junit.Rule
 import org.junit.Test
@@ -43,7 +44,7 @@ class ChampionList_OpenItemTest : KoinTest, TestResourcesPlugin {
         )
         declareModule {
             single<String>(Qualifiers.serverAddress) { serverRule.url("/") }
-            viewModel<ChampionListViewModel> { ChampionListViewModel(get(), get()) }
+            viewModel<ChampionListViewModel> { ChampionListViewModel(get()) }
         }
     }
 
@@ -53,6 +54,11 @@ class ChampionList_OpenItemTest : KoinTest, TestResourcesPlugin {
 
     @Test
     fun test_OpenItem() {
+        val navController = TestNavHostController(
+            ApplicationProvider.getApplicationContext()
+        )
+        navController.setGraph(R.navigation.nav_graph)
+
         val idlingResource = OkHttp3IdlingResource.create("network-idler", get())
         IdlingRegistry.getInstance().register(idlingResource)
 
@@ -70,15 +76,11 @@ class ChampionList_OpenItemTest : KoinTest, TestResourcesPlugin {
             )
         }
 
-        val wizard = mockk<Wizard>(relaxUnitFun = true)
-
-
-        declareModule {
-            single { wizard }
-        }
-
         val scenario = launchFragmentInContainer(themeResId = R.style.AppTheme) {
             ChampionListFragment()
+        }
+        scenario.onFragment { fragment ->
+            Navigation.setViewNavController(fragment.requireView(), navController)
         }
 
         scenario.moveToState(Lifecycle.State.RESUMED)
@@ -87,6 +89,7 @@ class ChampionList_OpenItemTest : KoinTest, TestResourcesPlugin {
             list.lastChild<ChampionItem> { click() }
         }
 
-        verify { wizard.openChampionDetails(any()) }
+        assertThat(navController.currentDestination?.id)
+            .isEqualTo(R.id.championDetailsFragment)
     }
 }

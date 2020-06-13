@@ -4,14 +4,15 @@ import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.valhalla.lolchampviewer.R
 import com.valhalla.lolchampviewer.net.models.ChampionShort
-import com.valhalla.lolchampviewer.ui.champion_details.ChampionDetailsFragment
 import com.valhalla.lolchampviewer.ui.core.BaseFragment
 import com.valhalla.lolchampviewer.ui.core.bindView
 import com.valhalla.lolchampviewer.ui.core.onClick
@@ -35,7 +36,9 @@ class ChampionListFragment : BaseFragment(R.layout.fragment_champions_list) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        lifecycle.addObserver(vm)
+        if (savedInstanceState == null) {
+            lifecycle.addObserver(vm)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -64,10 +67,18 @@ class ChampionListFragment : BaseFragment(R.layout.fragment_champions_list) {
             Toast.makeText(view.context, "Filter button clicked", Toast.LENGTH_SHORT).show()
         }
 
+    }
+
+    override fun onResume() {
+        super.onResume()
         vm.listState bindTo ::setListState
         vm.list bindTo ::setItems
         vm.isItemLoading bindTo ::setItemLoading
         vm.championListEvents bindTo ::handleEvent
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
     }
 
     private fun setListState(state: ChampionListState) {
@@ -114,19 +125,21 @@ class ChampionListFragment : BaseFragment(R.layout.fragment_champions_list) {
         when (event) {
             is ChampionListEvent.ChampionLoadingFailed -> {
                 Toast.makeText(
-                    context!!,
+                    requireContext(),
                     "Couldn't load info about ${event.champion.name}." +
                             " Check connection and try again",
                     Toast.LENGTH_SHORT
                 ).show()
             }
             is ChampionListEvent.OpenChampion -> {
-                activity?.supportFragmentManager
-                    ?.beginTransaction()?.apply {
-                        add(R.id.container, ChampionDetailsFragment(), "details")
-                        addToBackStack(null)
-                        commit()
-                    }
+                findNavController().navigate(
+                    R.id.action_championList_to_championDetails, bundleOf(
+                        "champion" to event.champion
+                    )
+                )
+            }
+            is ChampionListEvent.OpenSearch -> {
+                findNavController().navigate(R.id.action_championList_to_championSearch)
             }
         }
     }

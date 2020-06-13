@@ -12,8 +12,8 @@ android {
         applicationId "com.valhalla.lolchampviewer"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
+        versionCode PROJECT_VERSION_CODE.toInteger()
+        versionName "$PROJECT_VERSION"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
@@ -110,4 +110,13 @@ dependencies {
     implementation "com.squareup.okhttp3:logging-interceptor:4.7.2"
     androidTestImplementation "com.squareup.okhttp3:mockwebserver:4.7.2"
     implementation 'androidx.test.espresso:espresso-idling-resource:3.2.0'
+
+
+    def nav_version = "2.3.0-rc01"
+    // Kotlin
+    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+    androidTestImplementation "androidx.navigation:navigation-testing:$nav_version"
+
+
 }

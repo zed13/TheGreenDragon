@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/championListFragment">
+
+    <fragment
+        android:id="@+id/championListFragment"
+        android:name="com.valhalla.lolchampviewer.ui.champions_list.ChampionListFragment"
+        android:label="Champion List"
+        tools:layout="@layout/fragment_champions_list">
+
+        <action
+            android:id="@+id/action_championList_to_championDetails"
+            app:destination="@id/championDetailsFragment" />
+
+        <action
+            android:id="@+id/action_championList_to_championSearch"
+            app:destination="@id/championSearchFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/championDetailsFragment"
+        android:name="com.valhalla.lolchampviewer.ui.champion_details.ChampionDetailsFragment"
+        android:label="Champion Details"
+        tools:layout="@layout/fragment_champion_details">
+        <action
+            android:id="@+id/action_championDetails_to_championHistory"
+            app:destination="@id/championHistoryFragment" />
+        <action
+            android:id="@+id/action_championDetails_to_championSkills"
+            app:destination="@id/championSkillsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/championSearchFragment"
+        android:name="com.valhalla.lolchampviewer.ui.champion_search.ChampionSearchFragment"
+        android:label="Champion Search Fragment"
+        tools:layout="@layout/fragment_champion_search" >
+        <action
+            android:id="@+id/action_championSearch_to_championDetails"
+            app:destination="@id/championDetailsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/championSkillsFragment"
+        android:name="com.valhalla.lolchampviewer.ui.champion_skills.ChampionSkillsFragment"
+        android:label="ChampionSkillsFragment"
+        tools:layout="@layout/fragment_chamion_skills" />
+
+    <fragment
+        android:id="@+id/championHistoryFragment"
+        android:name="com.valhalla.lolchampviewer.ui.champion_history.ChampionHistoryFragment"
+        android:label="ChampionHistoryFragment"
+        tools:layout="@layout/fragment_champion_history" />
+
+</navigation>

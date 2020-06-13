@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.valhalla.lolchampviewer.net.DataDragonApi
 import com.valhalla.lolchampviewer.net.models.Champion
-import com.valhalla.lolchampviewer.ui.Wizard
 import com.valhalla.lolchampviewer.ui.core.Data
 import com.valhalla.lolchampviewer.ui.core.onlyPresent
 import kotlinx.coroutines.flow.Flow
@@ -25,7 +24,7 @@ class ChampionHistoryViewModel : ViewModel() {
 
 
     fun init(args: Bundle?) {
-        val champion = args?.getSerializable(Wizard.ARG_CHAMPION) as Champion
+        val champion = args?.getSerializable("champion") as Champion
 
         viewModelScope.launch {
             _splashImage.value =

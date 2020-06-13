@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.valhalla.lolchampviewer.R
@@ -52,6 +54,7 @@ class ChampionSearchFragment : BaseFragment(R.layout.fragment_champion_search) {
         }
 
         vm.list bindTo ::setList
+        vm.events bindTo ::handleEvent
         vm.query.filter { it != queryFieldView?.text?.toString() } bindTo ::setQuery
     }
 
@@ -77,5 +80,14 @@ class ChampionSearchFragment : BaseFragment(R.layout.fragment_champion_search) {
 
     private fun setQuery(query: String) {
         queryFieldView?.setText(query)
+    }
+
+    private fun handleEvent(event: ChampionSearchEvent) {
+        if (event is ChampionSearchEvent.OpenChampion) {
+            findNavController().navigate(
+                R.id.action_championSearch_to_championDetails,
+                bundleOf("champion" to event.champion)
+            )
+        }
     }
 }

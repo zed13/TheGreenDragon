@@ -6,17 +6,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.valhalla.lolchampviewer.net.DataDragonApi
 import com.valhalla.lolchampviewer.net.models.Champion
-import com.valhalla.lolchampviewer.ui.Wizard
 import com.valhalla.lolchampviewer.ui.core.Data
 import com.valhalla.lolchampviewer.ui.core.onlyPresent
+import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
-class ChampionDetailsViewModel(
-    val wizard: Wizard
-) : ViewModel() {
+class ChampionDetailsViewModel : ViewModel() {
 
     private lateinit var champion: Champion
 
@@ -25,6 +24,8 @@ class ChampionDetailsViewModel(
     private val _championData = MutableStateFlow<Data<ChampionViewData>>(Data.absent())
     private val _statsData = MutableStateFlow<List<StatViewData>>(emptyList())
     private val _skins = MutableStateFlow<List<String>>(emptyList())
+
+    private val _events = BroadcastChannel<ChampionDetailsEvent>(1)
 
     val splashImage: Flow<String>
         get() = _splashImage.onlyPresent()
@@ -43,8 +44,11 @@ class ChampionDetailsViewModel(
     val skins: Flow<List<String>>
         get() = _skins
 
+    val events: Flow<ChampionDetailsEvent>
+        get() = _events.openSubscription().receiveAsFlow()
+
     fun init(arguments: Bundle?) {
-        champion = arguments?.getSerializable(Wizard.ARG_CHAMPION) as Champion
+        champion = arguments?.getSerializable("champion") as Champion
 
         viewModelScope.launch {
             _championData.value = Data.of(ChampionViewData(champion))
@@ -57,10 +61,19 @@ class ChampionDetailsViewModel(
     }
 
     fun openLore() {
-        wizard.openChampionHistory(champion)
+        viewModelScope.launch {
+            _events.send(ChampionDetailsEvent.OpenHistory(champion))
+        }
     }
 
     fun onSkillsClick() {
-        wizard.openChampionSkills(champion)
+        viewModelScope.launch {
+            _events.send(ChampionDetailsEvent.OpenSkills(champion))
+        }
     }
+}
+
+sealed class ChampionDetailsEvent {
+    data class OpenHistory(val champion: Champion) : ChampionDetailsEvent()
+    data class OpenSkills(val champion: Champion) : ChampionDetailsEvent()
 }
