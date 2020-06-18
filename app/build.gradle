@@ -5,6 +5,9 @@ apply plugin: 'kotlinx-serialization'
 apply plugin: 'koin'
 apply plugin: 'kotlin-kapt'
 
+def properties = new Properties()
+file("../project-local.properties").withInputStream { properties.load(it) }
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
@@ -16,6 +19,7 @@ android {
         versionName "$PROJECT_VERSION"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
+        buildConfigField "java.lang.String" , "SERVER_ADDRESS", "\"${properties.getProperty("serverAddress")}\""
     }
 
     compileOptions {

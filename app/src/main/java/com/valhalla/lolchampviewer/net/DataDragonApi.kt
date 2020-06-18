@@ -1,5 +1,6 @@
 package com.valhalla.lolchampviewer.net
 
+import com.valhalla.lolchampviewer.BuildConfig
 import com.valhalla.lolchampviewer.net.models.*
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -10,7 +11,7 @@ interface DataDragonApi {
         const val DEFAULT_VERSION = "10.9.1"
         const val DEFAULT_LOCALE = "en_US"
 
-        const val API_ADDRESS = "http://192.168.0.51:8000"
+        const val API_ADDRESS = BuildConfig.SERVER_ADDRESS
 
         private val spellMapping = arrayOf("Q", "W", "E", "R")
 
