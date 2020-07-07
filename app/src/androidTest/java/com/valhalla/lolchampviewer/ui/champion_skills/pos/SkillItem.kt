@@ -7,6 +7,12 @@ import com.valhalla.lolchampviewer.R
 import org.hamcrest.Matcher
 
 class SkillItem(matcher: Matcher<View>) : KRecyclerItem<SkillItem>(matcher) {
-    val spellName: KTextView = KTextView { withId(R.id.spell_name) }
-    val spellDescription: KTextView = KTextView { withId(R.id.spell_description) }
+
+    val skillName: KTextView = KTextView {
+        withId(R.id.spell_name)
+    }
+
+    val skillDescription: KTextView = KTextView { withId(R.id.spell_description) }
+
+
 }

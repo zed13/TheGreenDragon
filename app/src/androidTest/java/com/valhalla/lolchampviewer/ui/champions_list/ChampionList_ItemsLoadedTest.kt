@@ -14,7 +14,7 @@ import com.valhalla.lolchampviewer.tools.MockWebServerRule
 import com.valhalla.lolchampviewer.tools.OkHttp3IdlingResource
 import com.valhalla.lolchampviewer.tools.TestResourcesPlugin
 import com.valhalla.lolchampviewer.ui.champions_list.pos.ChampionItem
-import com.valhalla.lolchampviewer.ui.champions_list.pos.ChampionsListScreen
+import com.valhalla.lolchampviewer.ui.champions_list.pos.KChampionListScreen
 import okhttp3.mockwebserver.MockResponse
 import org.junit.Rule
 import org.junit.Test
@@ -65,7 +65,7 @@ class ChampionList_ItemsLoadedTest : KoinTest, TestResourcesPlugin {
 
         scenario.moveToState(Lifecycle.State.RESUMED)
 
-        onScreen<ChampionsListScreen> {
+        onScreen<KChampionListScreen> {
             isListShown()
 
             list.firstChild<ChampionItem> {

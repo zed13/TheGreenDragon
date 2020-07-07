@@ -10,7 +10,7 @@ import com.valhalla.lolchampviewer.mainModule
 import com.valhalla.lolchampviewer.net.networkModule
 import com.valhalla.lolchampviewer.repository.repositoriesModule
 import com.valhalla.lolchampviewer.tools.MockWebServerRule
-import com.valhalla.lolchampviewer.ui.champions_list.pos.ChampionsListScreen
+import com.valhalla.lolchampviewer.ui.champions_list.pos.KChampionListScreen
 import okhttp3.mockwebserver.MockResponse
 import org.junit.Rule
 import org.junit.Test
@@ -57,7 +57,7 @@ class ChampionList_ErrorOnLoadingTest : KoinTest {
 
         scenario.moveToState(Lifecycle.State.RESUMED)
 
-        onScreen<ChampionsListScreen> {
+        onScreen<KChampionListScreen> {
             // todo: proper error handling
             isErrorShown("HTTP 404 Client Error")
         }

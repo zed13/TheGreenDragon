@@ -11,7 +11,7 @@ import com.valhalla.lolchampviewer.net.networkModule
 import com.valhalla.lolchampviewer.repository.repositoriesModule
 import com.valhalla.lolchampviewer.tools.MockWebServerRule
 import com.valhalla.lolchampviewer.tools.TestResourcesPlugin
-import com.valhalla.lolchampviewer.ui.champions_list.pos.ChampionsListScreen
+import com.valhalla.lolchampviewer.ui.champions_list.pos.KChampionListScreen
 import okhttp3.mockwebserver.MockResponse
 import org.junit.Rule
 import org.junit.Test
@@ -58,7 +58,7 @@ class ChampionList_EmptyListTest : KoinTest, TestResourcesPlugin {
         }
 
         scenario.moveToState(Lifecycle.State.RESUMED)
-        onScreen<ChampionsListScreen> {
+        onScreen<KChampionListScreen> {
             isErrorShown("The champion list is empty")
         }
     }
