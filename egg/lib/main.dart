@@ -57,13 +57,22 @@ class _MyHomePageState extends State<MyHomePage> {
 
   _MyHomePageState(this.championRepository, this.itemRepository);
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Center(child: _getPage(_pageIndex)),
+      body: Center(
+        child: IndexedStack(
+          children: <Widget>[
+            ChampionList(championRepository),
+            ItemList(itemRepository),
+          ],
+          index: _pageIndex,
+        ),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _pageIndex,
         onTap: (index) {
@@ -89,7 +98,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget _getPage(int index) {
     if (index == 1) {
-      return ItemList(itemRepository, key: GlobalKeys.ITEM_LIST,);
+      return ItemList(
+        itemRepository,
+        key: GlobalKeys.ITEM_LIST,
+      );
     } else {
       return ChampionList(championRepository, key: GlobalKeys.CHAMPION_LIST);
     }
