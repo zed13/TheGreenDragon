@@ -11,6 +11,7 @@ import server.champions.championsApi
 import server.items.FileItemsRepository
 import server.items.itemsApi
 import server.ktor.klaxon
+import server.locales.supportedLanguages
 import java.io.File
 
 fun main() {
@@ -27,6 +28,7 @@ fun main() {
         routing {
             championsApi(championsRepository)
             itemsApi(itemsRepository)
+            supportedLanguages()
         }
 
     }.start(wait = true)

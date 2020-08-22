@@ -8,6 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import server.guard
 import server.klaxon.JsonObject
+import server.ktor.locale
 
 fun Routing.itemsApi(itemsRepository: ItemsRepository) {
     getItem(itemsRepository)
@@ -26,7 +27,7 @@ fun Routing.getItems(itemsRepository: ItemsRepository) = get("/items") {
     val skip = call.request.queryParameters["skip"]?.toIntOrNull() ?: 0
 
     val items = withContext(Dispatchers.IO) {
-        itemsRepository.getItems(skip, take).let {
+        itemsRepository.getItems(skip, take, locale = call.request.locale).let {
             JsonObject(
                 "total" to it.total,
                 "items" to it.items
@@ -46,7 +47,7 @@ fun Routing.getItem(itemsRepository: ItemsRepository) = get("/item/{itemId}") {
     }
 
     val item = withContext(Dispatchers.IO) {
-        itemsRepository.getItem(itemId)
+        itemsRepository.getItem(itemId, call.request.locale)
     }
 
     if (item == null) {

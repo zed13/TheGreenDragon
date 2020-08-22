@@ -8,6 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import server.guard
 import server.klaxon.JsonObject
+import server.ktor.locale
 
 fun Routing.championsApi(championsRepository: ChampionsRepository) {
     getChampions(championsRepository)
@@ -25,7 +26,10 @@ fun Routing.getChampions(championsRepository: ChampionsRepository) = get("/champ
 
     val skip = call.request.queryParameters["skip"]?.toIntOrNull() ?: 0
 
-    val championsData = withContext(Dispatchers.IO) { championsRepository.getChampions(skip, take) }
+    val championsData = withContext(Dispatchers.IO) {
+        championsRepository.getChampions(skip, take, call.request.locale)
+    }
+
     call.respond(
         status = HttpStatusCode.OK,
         message = JsonObject(
@@ -41,7 +45,7 @@ fun Routing.getChampionById(championsRepository: ChampionsRepository) = get("/ch
         call.respond(HttpStatusCode.BadRequest, "chamionId param is missed")
         return@get
     }
-    val champion = withContext(Dispatchers.IO) { championsRepository.getChampion(championId) }
+    val champion = withContext(Dispatchers.IO) { championsRepository.getChampion(championId, call.request.locale) }
     if (champion == null) {
         call.respond(HttpStatusCode.NotFound, "Champion with id $championId is not found")
         return@get
