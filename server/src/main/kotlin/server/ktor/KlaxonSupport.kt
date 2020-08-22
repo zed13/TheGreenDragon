@@ -1,4 +1,4 @@
-package server
+package server.ktor
 
 import com.beust.klaxon.JsonArray
 import com.beust.klaxon.JsonObject
