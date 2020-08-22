@@ -26,7 +26,7 @@ fun Routing.getItems(itemsRepository: ItemsRepository) = get("/items") {
     val skip = call.request.queryParameters["skip"]?.toIntOrNull() ?: 0
 
     val items = withContext(Dispatchers.IO) {
-        itemsRepository.getItems(take, skip).let {
+        itemsRepository.getItems(skip, take).let {
             JsonObject(
                 "total" to it.total,
                 "items" to it.items

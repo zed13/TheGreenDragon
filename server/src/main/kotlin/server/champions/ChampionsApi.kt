@@ -1,12 +1,13 @@
 package server.champions
 
-import com.beust.klaxon.JsonObject
 import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import server.guard
+import server.klaxon.JsonObject
 
 fun Routing.championsApi(championsRepository: ChampionsRepository) {
     getChampions(championsRepository)
@@ -14,15 +15,24 @@ fun Routing.championsApi(championsRepository: ChampionsRepository) {
 }
 
 fun Routing.getChampions(championsRepository: ChampionsRepository) = get("/champions") {
-    val championsArray = withContext(Dispatchers.IO) { championsRepository.getChampions() }
-    if (championsArray == null) {
-        call.respond(HttpStatusCode.InternalServerError, "Couldn't found any champions")
-    } else {
-        call.respond(HttpStatusCode.OK, JsonObject().apply {
-            this["data"] = championsArray
-            this["total"] = championsArray.size
-        })
-    }
+    val take: Int = call.request.queryParameters["take"]?.toIntOrNull()
+        .guard {
+            call.respond(
+                HttpStatusCode.BadRequest,
+                "There is no 'take' parameter"
+            ); return@get
+        }
+
+    val skip = call.request.queryParameters["skip"]?.toIntOrNull() ?: 0
+
+    val championsData = withContext(Dispatchers.IO) { championsRepository.getChampions(skip, take) }
+    call.respond(
+        status = HttpStatusCode.OK,
+        message = JsonObject(
+            "total" to championsData.total,
+            "items" to championsData.items
+        )
+    )
 }
 
 fun Routing.getChampionById(championsRepository: ChampionsRepository) = get("/champion/{championId}") {

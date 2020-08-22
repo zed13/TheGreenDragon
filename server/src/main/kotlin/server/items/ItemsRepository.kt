@@ -10,8 +10,8 @@ import java.nio.file.Paths
 interface ItemsRepository {
 
     fun getItems(
-        take: Int,
         skip: Int,
+        take: Int,
         locale: String = "en_US"
     ): ItemListData
 
@@ -23,7 +23,7 @@ class FileItemsRepository(
     val storageDir: File
 ) : ItemsRepository {
 
-    override fun getItems(take: Int, skip: Int, locale: String): ItemListData {
+    override fun getItems(skip: Int, take: Int, locale: String): ItemListData {
         val itemsJson =
             parser.parse(
                 Paths.get(
