@@ -20,15 +20,15 @@ interface DataDragonApi {
         }
 
         fun getSkinAddress(champion: Champion, skin: Skin): String {
-            return "$API_ADDRESS/img/champion/splash/${champion.id}_${skin.num}.jpg"
+            return "$API_ADDRESS/img/champion/skin/${champion.id}_${skin.num}.jpg"
         }
 
         fun getPassiveIcon(passive: Passive): String {
-            return "$API_ADDRESS/$DEFAULT_VERSION/img/passive/${passive.image.full}"
+            return "$API_ADDRESS/$DEFAULT_VERSION/img/skill/passive/${passive.image.full}"
         }
 
         fun getSpellIcon(spell: Spell): String {
-            return "$API_ADDRESS/$DEFAULT_VERSION/img/spell/${spell.image.full}"
+            return "$API_ADDRESS/$DEFAULT_VERSION/img/skill/spell/${spell.image.full}"
         }
     }
 

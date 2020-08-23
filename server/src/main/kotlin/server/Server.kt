@@ -29,6 +29,8 @@ fun main() {
             championsApi(championsRepository)
             itemsApi(itemsRepository)
             supportedLanguages()
+
+            staticData(baseDir)
         }
 
     }.start(wait = true)
