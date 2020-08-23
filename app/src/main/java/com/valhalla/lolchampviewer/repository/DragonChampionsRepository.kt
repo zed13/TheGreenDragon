@@ -6,21 +6,17 @@ import com.valhalla.lolchampviewer.net.models.ChampionShort
 
 interface ChampionsRepository {
     suspend fun getChampions(): List<ChampionShort>
-
-    suspend fun getChampion(championId: String): Champion?
+    suspend fun getChampion(championId: String): Champion
 }
 
 class DragonChampionsRepository(private val api: DataDragonApi) : ChampionsRepository {
 
     override suspend fun getChampions(): List<ChampionShort> {
-        return api.getChampions().data
-            .values
-            .asSequence()
+        return api.getChampions().items
             .sortedBy { it.name }
-            .toList()
     }
 
-    override suspend fun getChampion(championId: String): Champion? {
-        return api.getChampion(championId = championId).data.values.firstOrNull()
+    override suspend fun getChampion(championId: String): Champion {
+        return api.getChampion(championId = championId)
     }
 }

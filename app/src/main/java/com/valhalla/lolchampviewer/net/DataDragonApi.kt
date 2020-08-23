@@ -16,7 +16,7 @@ interface DataDragonApi {
         private val spellMapping = arrayOf("Q", "W", "E", "R")
 
         fun getIconAddress(iconId: String): String {
-            return "$API_ADDRESS/$DEFAULT_VERSION/img/champion/${iconId}"
+            return "$API_ADDRESS/img/champion/${iconId}"
         }
 
         fun getSkinAddress(champion: Champion, skin: Skin): String {
@@ -24,25 +24,21 @@ interface DataDragonApi {
         }
 
         fun getPassiveIcon(passive: Passive): String {
-            return "$API_ADDRESS/$DEFAULT_VERSION/img/skill/passive/${passive.image.full}"
+            return "$API_ADDRESS/img/skill/passive/${passive.image.full}"
         }
 
         fun getSpellIcon(spell: Spell): String {
-            return "$API_ADDRESS/$DEFAULT_VERSION/img/skill/spell/${spell.image.full}"
+            return "$API_ADDRESS/img/skill/spell/${spell.image.full}"
         }
     }
 
-    @GET("{version}/data/{locale}/champion.json")
+    @GET("champions?take=100")
     suspend fun getChampions(
-        @Path("version") version: String = DEFAULT_VERSION,
-        @Path("locale") locale: String = DEFAULT_LOCALE
     ): ChampionsShortData
 
-    @GET("{version}/data/{locale}/champion/{championId}.json")
+    @GET("champion/{championId}")
     suspend fun getChampion(
-        @Path("version") version: String = DEFAULT_VERSION,
-        @Path("locale") locale: String = DEFAULT_LOCALE,
         @Path("championId") championId: String
-    ): ChampionData
+    ): Champion
 
 }

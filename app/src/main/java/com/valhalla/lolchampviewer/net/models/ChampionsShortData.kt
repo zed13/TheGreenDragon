@@ -5,9 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ChampionsShortData(
-    @SerialName("type") val type: String,
-    @SerialName("format") val format: String,
-    @SerialName("version") val version: String,
-    @SerialName("data") val data: Map<String, ChampionShort>
+    @SerialName("total") val total: Int,
+    @SerialName("items") val items: List<ChampionShort>
 ): java.io.Serializable
 
